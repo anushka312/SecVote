@@ -14,6 +14,7 @@ import UserLayout from './pages/layout/UserLayout.jsx'
 import Loading from './components/common/Loading.jsx'
 import Help from "./components/help/Help.jsx";
 import Search from "./components/searchPage/Search.jsx";
+import Profile from "./components/profilePage/Profile.jsx";
 
 function App() {
   const {isAuthLoading} = useSelector(state => state.auth);
@@ -60,6 +61,7 @@ function App() {
         <Route path='/test' element={<ComponentTest />}/>
         <Route path='help' element={<Help />} />
         <Route path='search' element={<Search />} />
+        <Route path='profile' element={<Profile />} />
 
         <Route path='*' element={<Error />} />
       </Routes>
