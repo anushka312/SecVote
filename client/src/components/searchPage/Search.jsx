@@ -15,6 +15,7 @@ export default function SearchPage() {
     }
   };
 
+  
   return (
     <div className="p-8 md:p-16 mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12 bg-[#121212] text-white">
       {/* Main Search Section */}

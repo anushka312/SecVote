@@ -62,7 +62,6 @@ export default function HelpSupport() {
 
       {/* Contact & Support Options */}
       <div className="space-y-8">
-        {/* Redesigned Contact Form */}
         <div className="bg-[#1e1e1e] p-8 rounded-2xl shadow-xl relative overflow-hidden">
   <h2 className="text-3xl font-extrabold mb-4 flex items-center gap-2 text-white">
     <Sparkles className="text-[#FFD166] w-10 h-10 mr-2" /> Need More Support?
