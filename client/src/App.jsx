@@ -7,14 +7,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import { checkAuth } from './store/slices/authSlice.js'
 import { Toaster } from './components/ui/toaster.jsx'
-import Search from './pages/protected/Search.jsx'
-
 import ComponentTest from './pages/ComponentTest.jsx'
 import CheckAuth from './pages/auth/CheckAuth.jsx'
 import AuthLayout from './pages/layout/AuthLayout.jsx'
 import UserLayout from './pages/layout/UserLayout.jsx'
 import Loading from './components/common/Loading.jsx'
 import Help from "./components/help/Help.jsx";
+import Search from "./components/searchPage/Search.jsx";
+import Profile from "./components/profilePage/Profile.jsx";
 
 function App() {
   const {isAuthLoading} = useSelector(state => state.auth);
@@ -57,10 +57,12 @@ function App() {
                 </CheckAuth>} 
         >
           <Route path='home' element={<Home />} />
-          <Route path='search' element={<Search />} />
         </Route>
         <Route path='/test' element={<ComponentTest />}/>
         <Route path='help' element={<Help />} />
+        <Route path='search' element={<Search />} />
+        <Route path='profile' element={<Profile />} />
+
         <Route path='*' element={<Error />} />
       </Routes>
     </div>
