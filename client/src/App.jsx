@@ -15,6 +15,7 @@ import Loading from './components/common/Loading.jsx'
 import Help from "./components/help/Help.jsx";
 import Search from "./components/searchPage/Search.jsx";
 import Profile from "./components/profilePage/Profile.jsx";
+import SlotBooking from './pages/SlotBooking'
 
 function App() {
   const {isAuthLoading} = useSelector(state => state.auth);
@@ -62,6 +63,7 @@ function App() {
         <Route path='help' element={<Help />} />
         <Route path='search' element={<Search />} />
         <Route path='profile' element={<Profile />} />
+        <Route path='slot' element={<SlotBooking />} />
 
         <Route path='*' element={<Error />} />
       </Routes>
