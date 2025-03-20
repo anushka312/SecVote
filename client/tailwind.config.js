@@ -45,7 +45,15 @@ export default {
 					'3': 'hsl(var(--chart-3))',
 					'4': 'hsl(var(--chart-4))',
 					'5': 'hsl(var(--chart-5))'
-				}
+				},
+				//all colors used in the SecVote
+				bg: "#121212",
+        		"light-black": "#1e1e1e",
+        		purple: "#7D67D2",
+        		blue: "#5A96E3",
+        		yellow: "#FFD166",
+        		"hover-yellow": "#E6C155",
+        		"text-box": "#2C2F42",
 			},
 			backgroundImage: {
 				'thoughts': "url('./public/Thoughts.png')"

@@ -35,16 +35,16 @@ export default function HelpSupport() {
   };
 
   return (
-    <div className="p-8 md:p-16 mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12 bg-gradient-to-br from-[#1a1a2e] to-[#16213e] text-white">
+    <div className="p-8 md:p-16 mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12 bg-[#121212] text-white">
       {/* FAQ Section */}
       <div className="col-span-1 lg:col-span-2">
-        <h1 className="text-5xl font-extrabold bg-gradient-to-r from-[#6EE7B7] to-[#3B82F6] bg-clip-text text-transparent mb-8">
+        <h1 className="text-5xl font-extrabold bg-white bg-clip-text text-transparent mb-8">
           How Can We Assist You?
         </h1>
 
         <div className="space-y-6">
           {faqs.map((faq, index) => (
-            <div key={index} className="bg-[#0f3460] p-6 rounded-xl shadow-lg hover:shadow-xl transition-transform duration-300">
+            <div key={index} className="bg-[#1e1e1e] p-6 rounded-xl shadow-lg hover:shadow-xl transition-transform duration-300">
               <div
                 className="flex items-center justify-between cursor-pointer"
                 onClick={() => toggleFAQ(index)}
@@ -62,10 +62,9 @@ export default function HelpSupport() {
 
       {/* Contact & Support Options */}
       <div className="space-y-8">
-        {/* Redesigned Contact Form */}
-        <div className="bg-gradient-to-r from-[#3A6073] to-[#4D3F91] p-8 rounded-2xl shadow-xl relative overflow-hidden">
+        <div className="bg-[#1e1e1e] p-8 rounded-2xl shadow-xl relative overflow-hidden">
   <h2 className="text-3xl font-extrabold mb-4 flex items-center gap-2 text-white">
-    <Sparkles className="text-[#FFD166] w-12 h-12 mr-2" /> Need More Support?
+    <Sparkles className="text-[#FFD166] w-10 h-10 mr-2" /> Need More Support?
   </h2>
 
   <p className="mb-4 text-gray-300 leading-relaxed">
@@ -104,7 +103,7 @@ export default function HelpSupport() {
     </div>
 
     {/* Submit Button */}
-    <Button className="w-full bg-gradient-to-r from-[#5A96E3] to-[#7D67D2] hover:from-[#7D67D2] hover:to-[#5A96E3] transition-all text-white font-semibold py-6 text-md rounded-xl shadow-lg">
+    <Button className="w-full bg-[#5A96E3] hover:bg-[#7D67D2] transition-all text-white font-semibold py-6 text-md rounded-xl shadow-lg">
       Send Request
     </Button>
   </form>
@@ -114,13 +113,13 @@ export default function HelpSupport() {
 
         {/* Support Options */}
         <div className="flex flex-col gap-4">
-          <button className="flex items-center gap-4 px-6 py-3 rounded-xl bg-[#1b1b3a] hover:bg-[#282846] transition duration-300 shadow-md">
+          <button className="flex items-center gap-4 px-6 py-3 rounded-xl bg-[#1e1e1e] transition duration-300 shadow-md">
             <Mail className="w-5 h-5 text-yellow-400" /> Email Support
           </button>
-          <button className="flex items-center gap-4 px-6 py-3 rounded-xl bg-[#1b1b3a] hover:bg-[#282846] transition duration-300 shadow-md">
+          <button className="flex items-center gap-4 px-6 py-3 rounded-xl bg-[#1e1e1e] transition duration-300 shadow-md">
             <MessageCircle className="w-5 h-5 text-green-400" /> Live Chat
           </button>
-          <button className="flex items-center gap-4 px-6 py-3 rounded-xl bg-[#1b1b3a] hover:bg-[#282846] transition duration-300 shadow-md">
+          <button className="flex items-center gap-4 px-6 py-3 rounded-xl bg-[#1e1e1e] transition duration-300 shadow-md">
             <PhoneCall className="w-5 h-5 text-blue-400" /> Call Us
           </button>
         </div>
