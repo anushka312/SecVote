@@ -6,8 +6,7 @@ import dotenv from 'dotenv'
 
 dotenv.config({path: './.env'})
 
-mongoose
-    .connect(`${process.env.MONGOBD_URI}/civic`)
+mongoose.connect(`${process.env.MONGODB_URI}/civic`)
     .then(() => console.log("MongoDB connected"))
     .catch((error) => console.log(error));
 

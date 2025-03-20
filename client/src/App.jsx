@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import { checkAuth } from './store/slices/authSlice.js'
 import { Toaster } from './components/ui/toaster.jsx'
+
 import ComponentTest from './pages/ComponentTest.jsx'
 import CheckAuth from './pages/auth/CheckAuth.jsx'
 import AuthLayout from './pages/layout/AuthLayout.jsx'
@@ -15,6 +16,7 @@ import Loading from './components/common/Loading.jsx'
 import Help from "./components/help/Help.jsx";
 import Search from "./components/searchPage/Search.jsx";
 import Profile from "./components/profilePage/Profile.jsx";
+import SlotBooking from './pages/SlotBooking'
 
 function App() {
   const {isAuthLoading} = useSelector(state => state.auth);
@@ -62,7 +64,7 @@ function App() {
         <Route path='help' element={<Help />} />
         <Route path='search' element={<Search />} />
         <Route path='profile' element={<Profile />} />
-
+        <Route path='slot' element={<SlotBooking />} />
         <Route path='*' element={<Error />} />
       </Routes>
     </div>
