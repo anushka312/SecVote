@@ -18,6 +18,7 @@ import Search from "./components/searchPage/Search.jsx";
 import Profile from "./components/profilePage/Profile.jsx";
 import PollingStation from './pages/PollingStation.jsx'
 import SlotBooking from './pages/SlotBooking'
+import Requests from './components/requests/Requests'
 
 function App() {
   const {isAuthLoading} = useSelector(state => state.auth);
@@ -68,6 +69,7 @@ function App() {
         <Route path='station/:id' element={<PollingStation />} />
         <Route path='slot' element={<SlotBooking />} />
         <Route path='*' element={<Error />} />
+        <Route path='request' element={<Requests />} />
       </Routes>
     </div>
   )
