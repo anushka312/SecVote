@@ -21,22 +21,22 @@ import SlotBooking from './pages/SlotBooking'
 import Requests from './components/requests/Requests'
 
 function App() {
-  const {isAuthLoading} = useSelector(state => state.auth);
+  // const {isAuthLoading} = useSelector(state => state.auth);
 
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(checkAuth());
-  }, [dispatch])
+  // const dispatch = useDispatch();
+  // useEffect(() => {
+  //   dispatch(checkAuth());
+  // }, [dispatch])
 
-  if(isAuthLoading){
-    console.log(isAuthLoading);
+  // if(isAuthLoading){
+  //   console.log(isAuthLoading);
     
-    return (
-      <div className='h-screen w-screen flex justify-center items-center'>
-        <Loading />
-      </div>
-    )
-  }
+  //   return (
+  //     <div className='h-screen w-screen flex justify-center items-center'>
+  //       <Loading />
+  //     </div>
+  //   )
+  // }
 
   return (
     <div>
@@ -53,23 +53,30 @@ function App() {
           <Route path='login' element={<Login />}/>
         </Route>
 
-        <Route
+        {/* <Route
             path='/' 
             element={
                 <CheckAuth>
                   <UserLayout />
                 </CheckAuth>} 
+        > */}
+
+        <Route
+            path='/' 
+            element={<UserLayout />}
         >
-          <Route path='home' element={<Home />} />
+          <Route path='' element={<Home />} />
+          <Route path='profile' element={<Profile />} />
+          <Route path='search' element={<Search />} />
+          <Route path='station/:id' element={<PollingStation />} />
+          <Route path='slot' element={<SlotBooking />} />
+          <Route path='request' element={<Requests />} />
+          <Route path='help' element={<Help />} />
         </Route>
+
         <Route path='/test' element={<ComponentTest />}/>
-        <Route path='help' element={<Help />} />
-        <Route path='search' element={<Search />} />
-        <Route path='profile' element={<Profile />} />
-        <Route path='station/:id' element={<PollingStation />} />
-        <Route path='slot' element={<SlotBooking />} />
         <Route path='*' element={<Error />} />
-        <Route path='request' element={<Requests />} />
+        
       </Routes>
     </div>
   )
