@@ -21,6 +21,22 @@ import SlotBooking from './pages/SlotBooking'
 import Requests from './components/requests/Requests'
 
 function App() {
+  // const {isAuthLoading} = useSelector(state => state.auth);
+
+  // const dispatch = useDispatch();
+  // useEffect(() => {
+  //   dispatch(checkAuth());
+  // }, [dispatch])
+
+  // if(isAuthLoading){
+  //   console.log(isAuthLoading);
+    
+  //   return (
+  //     <div className='h-screen w-screen flex justify-center items-center'>
+  //       <Loading />
+  //     </div>
+  //   )
+  // }
 
   return (
     <div>
@@ -43,18 +59,24 @@ function App() {
                 <CheckAuth>
                   <UserLayout />
                 </CheckAuth>} 
+        > */}
+
+        <Route
+            path='/' 
+            element={<UserLayout />}
         >
-          <Route path='home' element={<Home />} />
-        </Route> */}
-        <Route path='/' element={<Landing />} />
+          <Route path='' element={<Home />} />
+          <Route path='profile' element={<Profile />} />
+          <Route path='search' element={<Search />} />
+          <Route path='station/:id' element={<PollingStation />} />
+          <Route path='slot' element={<SlotBooking />} />
+          <Route path='request' element={<Requests />} />
+          <Route path='help' element={<Help />} />
+        </Route>
+
         <Route path='/test' element={<ComponentTest />}/>
-        <Route path='help' element={<Help />} />
-        <Route path='search' element={<Search />} />
-        <Route path='profile' element={<Profile />} />
-        <Route path='station/:id' element={<PollingStation />} />
-        <Route path='slot' element={<SlotBooking />} />
         <Route path='*' element={<Error />} />
-        <Route path='request' element={<Requests />} />
+        
       </Routes>
     </div>
   )
