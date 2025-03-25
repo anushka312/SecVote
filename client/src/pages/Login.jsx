@@ -1,5 +1,5 @@
 import Loading from '@/components/common/Loading.jsx'
-import Heading from '@/components/landing/Heading.jsx'
+import Heading from '@/components/landing/Header.jsx'
 import { Button } from '@/components/ui/button.jsx'
 import { Input } from '@/components/ui/input.jsx'
 import { Label } from '@/components/ui/label.jsx'
