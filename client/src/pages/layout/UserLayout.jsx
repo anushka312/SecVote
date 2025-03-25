@@ -1,3 +1,5 @@
+import NavBar from '@/components/common/NavBar.jsx';
+import Footer from '@/components/common/Footer.jsx';
 import React, { useEffect, useState } from 'react'
 import { Outlet } from 'react-router-dom'
 
@@ -6,12 +8,15 @@ const UserLayout = () => {
 
     return (
         <>
-            <div className='flex max-h-screen relative'>
-                <div className='fixed bg-transparent rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 border-r-[0.25px] border-solid border-white'>
-                    Sidebar
+            <div className='flex flex-col relative'>
+                <div className='z-10000 '>
+                    <NavBar />
                 </div>
-                <div className='flex-1 mt-12'>
+                <div className='bg-green-600 flex-1'>
                     <Outlet />
+                </div>
+                <div>
+                    <Footer />
                 </div>
             </div>
         </>
