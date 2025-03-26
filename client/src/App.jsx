@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom'
 import './App.css'
 import Error from './pages/Error.jsx'
-import Home from './pages/protected/Home.jsx'
+import Landing from './components/landing/Landing.jsx'
 import Login from './pages/Login.jsx'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
@@ -21,62 +21,20 @@ import SlotBooking from './pages/SlotBooking'
 import Requests from './components/requests/Requests'
 
 function App() {
-  // const {isAuthLoading} = useSelector(state => state.auth);
-
-  // const dispatch = useDispatch();
-  // useEffect(() => {
-  //   dispatch(checkAuth());
-  // }, [dispatch])
-
-  // if(isAuthLoading){
-  //   console.log(isAuthLoading);
-    
-  //   return (
-  //     <div className='h-screen w-screen flex justify-center items-center'>
-  //       <Loading />
-  //     </div>
-  //   )
-  // }
 
   return (
     <div>
       <Toaster />
       <Routes>
-
-        <Route 
-          path='/auth' 
-          element={
-            <CheckAuth>
-              <AuthLayout />
-            </CheckAuth>}
-        >
-          <Route path='login' element={<Login />}/>
-        </Route>
-
-        {/* <Route
-            path='/' 
-            element={
-                <CheckAuth>
-                  <UserLayout />
-                </CheckAuth>} 
-        > */}
-
-        <Route
-            path='/' 
-            element={<UserLayout />}
-        >
-          <Route path='' element={<Home />} />
+          <Route path='' element={<Landing />} />
           <Route path='profile' element={<Profile />} />
           <Route path='search' element={<Search />} />
           <Route path='station/:id' element={<PollingStation />} />
           <Route path='slot' element={<SlotBooking />} />
           <Route path='request' element={<Requests />} />
           <Route path='help' element={<Help />} />
-        </Route>
-
         <Route path='/test' element={<ComponentTest />}/>
         <Route path='*' element={<Error />} />
-        
       </Routes>
     </div>
   )
