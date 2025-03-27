@@ -5,12 +5,12 @@ import { Outlet } from 'react-router-dom'
 
 
 const UserLayout = () => {
-
+    const [isAdmin, setIsAdmin] = useState(true);
     return (
         <>
             <div className='flex flex-col relative'>
                 <div className='z-10000 '>
-                    <NavBar />
+                    <NavBar isAdmin={isAdmin} setIsAdmin={setIsAdmin}/>
                 </div>
                 <div className='bg-green-600 flex-1'>
                     <Outlet />

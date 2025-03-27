@@ -5,18 +5,20 @@ import HowItWorks from "./HowItWorks";
 import Features from "./Features";
 import CTA from "./CTA";
 import Footer from "./Footer";
+import ElectionTimeline from "../ElectionTimeline.jsx";
 
 const LandingPage = () => {
   return (
     <div className="bg-[#121212] text-white min-h-screen">
-      <Header />
+      {/* <Header /> */}
       <main>
         <Hero />
+        <ElectionTimeline />
         <HowItWorks />
         <Features />
         <CTA />
       </main>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };

@@ -1,38 +1,36 @@
+import { Github, Globe, ShieldCheck, Twitter } from 'lucide-react'
 import React from 'react'
 
 
 const Footer = () => {
     return (
         <>
-            <div className="bg-[#121212] border-t-[1px] border-white pt-4">
-                <div className="max-w-screen-lg px-4 sm:px-6 text-white sm:grid md:grid-cols-4 sm:grid-cols-2 mx-auto">
-                    <div className="p-5">
-                        <h3 className="font-bold text-2xl text-white">Secure Vote</h3>
+            <footer className="bg-gradient-to-b from-gray-900 to-black py-10 text-gray-400">
+                <div className="container mx-auto px-6 text-center">
+                    {/* Logo & Tagline */}
+                    <div className="flex justify-center items-center gap-2 text-white text-xl font-bold">
+                        <ShieldCheck className="w-6 h-6 text-[#FFD166]" />
+                        SecVote
                     </div>
-                    <div className="p-5">
-                        <div className="text-md uppercase text-white font-bold">Quick Links</div>
-                        <a className="my-3 block" href="/#">Poling Station <span className="text-teal-600 text-xs p-1"></span></a><a
-                            className="my-3 block" href="/#">Profile <span className="text-teal-600 text-xs p-1"></span></a><a
-                                className="my-3 block" href="/#">Search</a>
+                    <p className="text-gray-500 mt-2">India's Secure Digital Voting System</p>
+
+                    {/* Links */}
+                    <div className="mt-6 flex justify-center gap-6">
+                        <a href="#" className="hover:text-white transition">Privacy Policy</a>
+                        <a href="#" className="hover:text-white transition">Terms of Service</a>
+                        <a href="#" className="hover:text-white transition">Contact</a>
                     </div>
-                    <div className="p-5">
-                        <div className="text-md uppercase text-white font-bold">Support</div>
-                        <a className="my-3 block" href="/#">Request<span className="text-teal-600 text-xs p-1"></span></a><a
-                            className="my-3 block" href="/#">Help<span className="text-teal-600 text-xs p-1"></span></a>
+
+                    {/* Social Links */}
+                    <div className="mt-6 flex justify-center gap-6">
+                        <a href="#" className="hover:text-white transition"><Twitter className="w-5 h-5" /></a>
+                        <a href="#" className="hover:text-white transition"><Github className="w-5 h-5" /></a>
+                        <a href="#" className="hover:text-white transition"><Globe className="w-5 h-5" /></a>
                     </div>
-                    <div className="p-5">
-                        <div className="text-md uppercase text-white font-bold">Contact us</div>
-                        <a className="my-3 block" href="/#">XXX XXXX, Floor 4 San Francisco, CA
-                            <span className="text-teal-600 text-xs p-1"></span></a><a className="my-3 block" href="/#">contact@company.com
-                            <span className="text-teal-600 text-xs p-1"></span></a>
-                    </div>
+
+                    <p className="text-gray-500 mt-6 text-sm">&copy; {new Date().getFullYear()} SecVote. All rights reserved.</p>
                 </div>
-            </div>
-
-            <div className="bg-[#121212] pt-2">
-                <div className="p-4 text-center text-white border-y-[1px]">© Copyright 2025. All Rights Reserved.</div>
-
-            </div>
+            </footer>
         </>
     )
 }

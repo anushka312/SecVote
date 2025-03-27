@@ -19,22 +19,42 @@ import Profile from "./components/profilePage/Profile.jsx";
 import PollingStation from './pages/PollingStation.jsx'
 import SlotBooking from './pages/SlotBooking'
 import Requests from './components/requests/Requests'
+import UserStatus from './pages/UserStatus.jsx'
+import UserStatusAdmin from './pages/protected/UserStatusAdmin.jsx'
+import UserSearch from './pages/UserSearch.jsx'
 
 function App() {
 
   return (
     <div>
       <Toaster />
+      {/* <Routes>
+        <Route path='' element={<Landing />} />
+        <Route path='profile' element={<Profile />} />
+        <Route path='search' element={<Search />} />
+        <Route path='station/:id' element={<PollingStation />} />
+        <Route path='slot' element={<SlotBooking />} />
+        <Route path='request' element={<Requests />} />
+        <Route path='help' element={<Help />} />
+        <Route path='/test' element={<ComponentTest />} />
+        <Route path='*' element={<Error />} />
+      </Routes> */}
+
       <Routes>
+        <Route
+          path='/'
+          element={<UserLayout />}
+        >
           <Route path='' element={<Landing />} />
+          <Route path='user-status' element={<UserStatusAdmin />} />
           <Route path='profile' element={<Profile />} />
-          <Route path='search' element={<Search />} />
+          <Route path='search' element={<UserSearch />} />
           <Route path='station/:id' element={<PollingStation />} />
           <Route path='slot' element={<SlotBooking />} />
           <Route path='request' element={<Requests />} />
           <Route path='help' element={<Help />} />
-        <Route path='/test' element={<ComponentTest />}/>
-        <Route path='*' element={<Error />} />
+        </Route>
+        <Route path='/test' element={<ComponentTest />} />
       </Routes>
     </div>
   )
