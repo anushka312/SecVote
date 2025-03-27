@@ -80,7 +80,7 @@ export default function SearchPage() {
       </div>
 
       {/* Sidebar */}
-      <div className="space-y-8">
+      <div className="space-y-8 max-h-[60vh] overflow-y-scroll">
         {/* Trending Searches */}
         <div className="bg-[#1b1b1b] p-6 rounded-2xl">
           <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">

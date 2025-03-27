@@ -27,7 +27,7 @@ const faqs = [
     },
   ];
 
-export default function HelpSupport() {
+export function HelpSupport() {
   const [openIndex, setOpenIndex] = useState(null);
 
   const toggleFAQ = (index) => {
@@ -146,3 +146,18 @@ export default function HelpSupport() {
     </div>
   );
 }
+
+import React from 'react'
+import Search from "@/pages/protected/Search.jsx";
+import SearchPage from "../searchPage/Search.jsx";
+
+const Help = () => {
+  return (
+    <>
+      <SearchPage />
+      <HelpSupport />
+    </>
+  )
+}
+
+export default Help
