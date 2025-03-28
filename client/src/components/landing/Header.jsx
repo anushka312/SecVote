@@ -4,12 +4,14 @@ import { Button } from "@/components/ui/button";
 
 const Header = () => {
   return (
-    <header className="fixed top-0 left-0 w-full bg-[#121212]/80 backdrop-blur-md border-b border-gray-800 z-50">
+    <header className="fixed top-0 left-0 w-full bg-gradient-to-r from-indigo-900 via-transparent border-b border-gray-800 z-50">
       <div className="container mx-auto px-6 py-4 flex justify-between items-center">
         {/* Logo */}
         <div className="flex items-center gap-2 text-white font-bold text-2xl">
+        <Link to="/">
           <ShieldCheck className="w-6 h-6 text-[#FFD166]" />
           SecVote
+          </Link>
         </div>
 
         {/* Navigation */}
