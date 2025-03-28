@@ -43,7 +43,7 @@ const PollingStation = () => {
     return (
         <>
             <div className="p-8 md:p-16 mx-auto bg-[#121212] text-white">
-                <h1 className="text-center p-2 text-4xl font-bold text-gray-200">Polling Station information</h1>
+                <h1 className="text-center p-2 mb-4 text-5xl font-extrabold text-gray-200">Polling Station Information</h1>
 
                 <div className="flex flex-col justify-start gap-4">
                     {/*Polling Station Info */}
@@ -59,8 +59,8 @@ const PollingStation = () => {
                         </div>
 
                         {/* Polling Station Details */}
-                        <div className="p-6 bg-[#1e1e1e] rounded-xl shadow-lg text-2xl flex flex-col justify-start items-start gap-1">
-                            <h2 className="text-3xl font-bold mb-4 text-center">{station.name}</h2>
+                        <div className="p-6 bg-[#1e1e1e] rounded-xl shadow-lg text-lg flex flex-col justify-start items-start gap-1">
+                            <h2 className="text-2xl font-bold mb-4 text-center">{station.name}</h2>
                             <p className="text-gray-400">Assembly Constituency: <span className="font-semibold text-white">{station.AC}</span></p>
                             <p className="text-gray-400">Polling Station: <span className="font-semibold text-white">{station.PS}</span></p>
                             <p className="text-gray-400">Constituency: <span className="font-semibold text-white">{station.constituency}</span></p>
