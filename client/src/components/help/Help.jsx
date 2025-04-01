@@ -2,7 +2,15 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, Mail, MessageCircle, PhoneCall, HelpCircle, Sparkles } from "lucide-react";
+import {
+  ChevronDown,
+  Mail,
+  MessageCircle,
+  PhoneCall,
+  HelpCircle,
+  Sparkles,
+} from "lucide-react";
+import SearchPage from "../searchPage/Search.jsx";
 
 const faqs = [
   {
@@ -121,7 +129,9 @@ const RaiseIssue = () => {
   )
 }
 
-export function HelpSupport() {
+
+
+const Help = () => {
   const [openIndex, setOpenIndex] = useState(null);
 
   const toggleFAQ = (index) => {
@@ -129,35 +139,42 @@ export function HelpSupport() {
   };
 
   return (
-    <div className="p-8 md:p-16 mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12 bg-[#121212] text-white">
-      {/* FAQ Section */}
-      <div className="col-span-1 lg:col-span-2">
-        <h1 className="text-5xl font-extrabold bg-white bg-clip-text text-transparent mb-8">
-          How Can We Assist You?
-        </h1>
+    <>
+      <div className="p-8 md:p-16 mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12 bg-[#121212] text-white">
+        {/* FAQ Section */}
+        <div className="col-span-1 lg:col-span-2">
+          <h1 className="text-5xl font-extrabold bg-white bg-clip-text text-transparent mb-8">
+            How Can We Assist You?
+          </h1>
 
-        <div className="space-y-6">
-          {faqs.map((faq, index) => (
-            <div key={index} className="bg-[#1e1e1e] p-6 rounded-xl shadow-lg hover:shadow-xl transition-transform duration-300">
+          <div className="space-y-6">
+            {faqs.map((faq, index) => (
               <div
-                className="flex items-center justify-between cursor-pointer"
-                onClick={() => toggleFAQ(index)}
+                key={index}
+                className="bg-[#1e1e1e] p-6 rounded-xl shadow-lg hover:shadow-xl transition-transform duration-300"
               >
-                <h2 className="text-xl font-semibold">{faq.question}</h2>
-                <ChevronDown className={`w-6 h-6 transition-transform ${openIndex === index ? "rotate-180" : ""}`} />
+                <div
+                  className="flex items-center justify-between cursor-pointer"
+                  onClick={() => toggleFAQ(index)}
+                >
+                  <h2 className="text-xl font-semibold">{faq.question}</h2>
+                  <ChevronDown
+                    className={`w-6 h-6 transition-transform ${
+                      openIndex === index ? "rotate-180" : ""
+                    }`}
+                  />
+                </div>
+                {openIndex === index && (
+                  <p className="mt-4 text-gray-300">{faq.answer}</p>
+                )}
               </div>
-              {openIndex === index && (
-                <p className="mt-4 text-gray-300">{faq.answer}</p>
-              )}
-            </div>
-          ))}
+            ))}
+          </div>
+          <SearchPage />
         </div>
-      </div>
-
 
       {/* Contact & Support Options */}
       <RaiseIssue />
-
 
 
       {/* Support Options */}
@@ -192,21 +209,8 @@ export function HelpSupport() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 
-import React from 'react'
-import Search from "@/pages/protected/Search.jsx";
-import SearchPage from "../searchPage/Search.jsx";
-import axios from "axios";
-
-const Help = () => {
-  return (
-    <>
-      <SearchPage />
-      <HelpSupport />
-    </>
-  )
-}
-
-export default Help
+export default Help;
