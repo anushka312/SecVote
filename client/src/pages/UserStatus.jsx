@@ -28,7 +28,7 @@ const statusSteps = [
     }
 ];
 
-const UserCard = () => {
+const UserCard = ({ voter }) => {
     return (
         <div className="bg-[#212121] rounded-lg p-6 mb-8 shadow-xl">
             <h2 className="text-2xl font-bold text-white mb-4">Voter Information</h2>
@@ -57,33 +57,41 @@ const UserCard = () => {
     );
 };
 
-const Timeline = () => {
+const Timeline = ({ voter }) => {
     return (
         <div className="space-y-8">
             {statusSteps.map((step, index) => (
                 <div key={index} className="flex items-start">
                     <div className="flex items-center h-16">
-                        {step.status === 'completed' ? (
+                        {voter.statusTimeline.step > index ? (
                             <CheckCircle2Icon className="w-8 h-8 text-green-500" />
                         ) : (
                             <Clock2Icon className="w-8 h-8 text-gray-400" />
                         )}
-                        {index !== statusSteps.length - 1 && (
+                        {voter.statusTimeline.step > index && (
                             <div className="h-full w-0.5 bg-gray-700 ml-4"></div>
                         )}
                     </div>
                     <div className="ml-4">
                         <h3 className="text-lg font-medium text-white">{step.title}</h3>
-                        <div className="text-sm text-gray-400">
+                        {voter.statusTimeline.step > index ? (
+                            <div className="text-sm text-gray-400">
+                                <p>Date: {voter.statusTimeline.date}</p>
+                                <p>Time: {voter.statusTimeline.time}</p>
+                            </div>)
+                        :
+                        (<div className="text-sm text-gray-400">
                             <p>Date: {step.date}</p>
                             <p>Time: {step.time}</p>
                         </div>
+                        )}
+
                         <div className="mt-2">
-                            <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${step.status === 'completed'
-                                    ? 'bg-green-900 text-green-300'
-                                    : 'bg-gray-700 text-gray-300'
+                            <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${voter.statusTimeline.step > index
+                                ? 'bg-green-900 text-green-300'
+                                : 'bg-gray-700 text-gray-300'
                                 }`}>
-                                {step.status === 'completed' ? 'Completed' : 'Pending'}
+                                {voter.statusTimeline.step > index ? 'Completed' : 'Pending'}
                             </span>
                         </div>
                     </div>
@@ -93,13 +101,13 @@ const Timeline = () => {
     );
 };
 
-function UserStatus() {
+function UserStatus({ voter }) {
     return (
-        <div className="min-h-screen bg-[#121212] py-12 px-4 sm:px-6 lg:px-8">
+        <div className="bg-[#212121] p-4">
             <div className="max-w-3xl mx-auto">
-                <h1 className="text-3xl font-bold text-white mb-8">Voter Status Timeline</h1>
-                <UserCard />
-                <Timeline />
+                <h1 className="text-center text-xl font-bold text-white mb-8">Voter Activity Timeline</h1>
+                {/* <UserCard /> */}
+                <Timeline voter={voter} />
             </div>
         </div>
     );
