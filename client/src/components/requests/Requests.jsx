@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import {
   Dialog,
   DialogContent,
@@ -18,6 +18,7 @@ import {
   ChevronDown,
   ChevronUp,
 } from "lucide-react"
+import axios from "axios"
 
 // Simple multi-select with tags and a dropdown
 function MultiSelect({ options, selectedValues, onChange, placeholder, icon }) {
@@ -79,14 +80,14 @@ function MultiSelect({ options, selectedValues, onChange, placeholder, icon }) {
 // Assign a background color for each status
 function getStatusColor(status) {
   switch (status) {
-    case "Urgent":       return "bg-red-600"
-    case "Rejected":     return "bg-gray-600"
-    case "Completed":    return "bg-green-600"
-    case "Pending":      return "bg-yellow-600"
-    case "In Progress":  return "bg-blue-600"
-    case "Resolved":     return "bg-teal-600"
-    case "Escalated":    return "bg-purple-600"
-    default:             return "bg-gray-500"
+    case "Urgent": return "bg-red-600"
+    case "Rejected": return "bg-gray-600"
+    case "Completed": return "bg-green-600"
+    case "Pending": return "bg-yellow-600"
+    case "In Progress": return "bg-blue-600"
+    case "Resolved": return "bg-teal-600"
+    case "Escalated": return "bg-purple-600"
+    default: return "bg-gray-500"
   }
 }
 
@@ -143,37 +144,54 @@ function generateDummyRequests(count) {
 const dummyRequests = generateDummyRequests(50)
 
 export default function Requests() {
-  const [selectedRequestTypes, setSelectedRequestTypes] = useState([])
-  const [selectedStatuses, setSelectedStatuses] = useState([])
-  const [filtered, setFiltered] = useState(dummyRequests)
-  const [selectedRequest, setSelectedRequest] = useState(null)
+  const [requests, setRequests] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Apply filters to the dummyRequests
-  const handleFilter = () => {
-    setFiltered(
-      dummyRequests.filter((req) => {
-        const matchType = selectedRequestTypes.length
-          ? selectedRequestTypes.includes(req.type)
-          : true
-        const matchStatus = selectedStatuses.length
-          ? selectedStatuses.includes(req.status)
-          : true
-        return matchType && matchStatus
-      })
-    )
-  }
+  // const [selectedRequestTypes, setSelectedRequestTypes] = useState([])
+  // const [selectedStatuses, setSelectedStatuses] = useState([])
+  // const [filtered, setFiltered] = useState(dummyRequests)
+  // const [selectedRequest, setSelectedRequest] = useState(null)
 
-  // Press Enter on a focused row to open the dialog
-  const handleRowKeyDown = (e, req) => {
-    if (e.key === "Enter") setSelectedRequest(req)
-  }
+  useEffect(() => {
+    const fetchIssues = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/issues");
+        setRequests(response.data);
+      } catch (error) {
+        console.error("Error fetching issues:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchIssues();
+  }, []);
+
+  // // Apply filters to the dummyRequests
+  // const handleFilter = () => {
+  //   setFiltered(
+  //     dummyRequests.filter((req) => {
+  //       const matchType = selectedRequestTypes.length
+  //         ? selectedRequestTypes.includes(req.type)
+  //         : true
+  //       const matchStatus = selectedStatuses.length
+  //         ? selectedStatuses.includes(req.status)
+  //         : true
+  //       return matchType && matchStatus
+  //     })
+  //   )
+  // }
+
+  // // Press Enter on a focused row to open the dialog
+  // const handleRowKeyDown = (e, req) => {
+  //   if (e.key === "Enter") setSelectedRequest(req)
+  // }
 
   return (
     <div className="p-8 md:p-16 mx-auto bg-[#121212] text-white min-h-screen">
       <h1 className="text-5xl font-extrabold text-gray-100 mb-8">Requests</h1>
 
       {/* Filters */}
-      <div className="flex flex-col md:flex-row gap-4 mb-6 items-center">
+      {/* <div className="flex flex-col md:flex-row gap-4 mb-6 items-center">
         <MultiSelect
           options={requestTypes}
           selectedValues={selectedRequestTypes}
@@ -194,12 +212,12 @@ export default function Requests() {
         >
           Filter
         </Button>
-      </div>
+      </div> */}
 
       {/* Table */}
       <div className="bg-[#1e1e1e] rounded-xl shadow-lg">
         {/* Header */}
-        <div className="grid grid-cols-5 gap-4 font-semibold border-b border-gray-700 p-4 sticky top-0 bg-[#1e1e1e] z-10">
+        {/* <div className="grid grid-cols-5 gap-4 font-semibold border-b border-gray-700 p-4 sticky top-0 bg-[#1e1e1e] z-10">
           <div className="flex items-center gap-2">
             <Hash className="w-4 h-4" /> Request ID
           </div>
@@ -215,9 +233,9 @@ export default function Requests() {
           <div className="flex items-center gap-2">
             <CheckCircle className="w-4 h-4 text-yellow-500" /> Status
           </div>
-        </div>
+        </div> */}
         {/* Body (scrollable) */}
-        <div className="max-h-80 overflow-y-auto custom-scrollbar">
+        {/* <div className="max-h-80 overflow-y-auto custom-scrollbar">
           {filtered.map((req) => (
             <div
               key={req.requestId}
@@ -240,11 +258,11 @@ export default function Requests() {
           {!filtered.length && (
             <div className="text-center text-gray-400 p-4">No requests found.</div>
           )}
-        </div>
+        </div> */}
       </div>
 
       {/* Dialog (no top-right X) */}
-      <Dialog open={!!selectedRequest} onOpenChange={(o) => !o && setSelectedRequest(null)}>
+      {/* <Dialog open={!!selectedRequest} onOpenChange={(o) => !o && setSelectedRequest(null)}>
         <DialogContent className="bg-[#1e1e1e] text-white border-none shadow-2xl rounded-lg p-6">
           {selectedRequest && (
             <>
@@ -287,7 +305,32 @@ export default function Requests() {
             </>
           )}
         </DialogContent>
-      </Dialog>
+      </Dialog> */}
+
+
+      // Newly Added Code
+      <div className="max-w-lg mx-auto bg-gray-900 p-6 rounded-lg shadow-lg text-white">
+        <h2 className="text-2xl font-bold mb-4">Submitted Issues</h2>
+        {loading ? (
+          <p>Loading issues...</p>
+        ) : requests.length === 0 ? (
+          <p>No issues found.</p>
+        ) : (
+          <ul>
+            {requests.map((issue) => (
+              <li key={issue._id} className="border-b border-gray-700 py-2">
+                <p><strong>EPIC:</strong> {issue.epic}</p>
+                <p><strong>Name:</strong> {issue.name}</p>
+                <p><strong>Email:</strong> {issue.email}</p>
+                <p><strong>Issue:</strong> {issue.issue}</p>
+                <p className="text-sm text-gray-400">
+                  Submitted on: {new Date(issue.createdAt).toLocaleString()}
+                </p>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   )
 }

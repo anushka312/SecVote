@@ -47,7 +47,7 @@ function App() {
         >
           <Route path='' element={<Landing />} />
           <Route path='user-status' element={<UserStatusAdmin />} />
-          <Route path='profile' element={<Profile />} />
+          <Route path='profile/:id' element={<Profile />} />
           <Route path='search' element={<UserSearch />} />
           <Route path='station/:id' element={<PollingStation />} />
           <Route path='slot' element={<SlotBooking />} />

@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Search, ChevronDown, ChevronUp, Filter, Clock, TrendingUp, BookOpen, Lightbulb, HelpCircle } from "lucide-react";
 
+
+
 export default function SearchPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);

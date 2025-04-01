@@ -3,84 +3,36 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
 
-const users = [
-    {
-        name: "Rahul Sharma",
-        voterId: "VOT123456",
-        epicNumber: "EPIC789012",
-        age: 32,
-        gender: "Male",
-    },
-    {
-        name: "Ananya Verma",
-        voterId: "VOT654321",
-        epicNumber: "EPIC345678",
-        age: 28,
-        gender: "Female",
-    },
-    {
-        name: "Vikram Singh",
-        voterId: "VOT987654",
-        epicNumber: "EPIC567890",
-        age: 45,
-        gender: "Male",
-    },
-    {
-        name: "Neha Patil",
-        voterId: "VOT112233",
-        epicNumber: "EPIC778899",
-        age: 38,
-        gender: "Female",
-    },
-    {
-        name: "Amit Desai",
-        voterId: "VOT445566",
-        epicNumber: "EPIC990011",
-        age: 29,
-        gender: "Male",
-    },
-];
 
 
-const API_BASE_URL = 'http://your-api-url/api';
+const API_BASE_URL = 'http://localhost:5000/api';
 
 function UserSearch() {
-    const [voterId, setVoterId] = useState('');
-    const [userData, setUserData] = useState(users);
-    const [statusSteps, setStatusSteps] = useState(null);
+    const [query, setQuery] = useState('');
+    const [userData, setUserData] = useState([]);
     const [loading, setLoading] = useState(false);
+
 
     const handleSearch = async (e) => {
         e.preventDefault();
-        if (!voterId.trim()) {
+        setQuery(e.target.value)
+        if (!query.trim()) {
             toast.error('Please enter a Voter ID');
             return;
         }
-
         setLoading(true);
         try {
-            const response = await axios.get(`${API_BASE_URL}/voter/${voterId}`);
-            setUserData(response.data.user);
-            setStatusSteps(response.data.statusSteps);
-            toast.success('User found successfully');
+            const response = await axios.get(`${API_BASE_URL}/voter/search/?query=${query}`);
+            setUserData(response.data.voters);
+            toast.success('Voters Fetched');
         } catch (error) {
-            console.error('Error fetching user:', error);
+            console.error('Error fetching voters:', error);
             toast.error('User not found or error occurred');
             setUserData(null);
-            setStatusSteps(null);
         } finally {
             setLoading(false);
+            // setQuery("");
         }
-    };
-
-    const handleUpdateStatus = (stepId, date, time) => {
-        setStatusSteps(prevSteps =>
-            prevSteps.map(step =>
-                step.id === stepId
-                    ? { ...step, status: 'completed', date, time }
-                    : step
-            )
-        );
     };
 
     return (
@@ -91,22 +43,22 @@ function UserSearch() {
                     <form onSubmit={handleSearch} className="flex gap-4">
                         <input
                             type="text"
-                            value={voterId}
-                            onChange={(e) => setVoterId(e.target.value)}
+                            value={query}
+                            // onChange={(e) => setQuery(e.target.value)}
+                            onChange={(e) => handleSearch(e)}
                             placeholder="Enter Voter ID"
                             className="flex-1 bg-gray-800 text-white rounded-lg px-4 py-2 border border-gray-700 focus:outline-none focus:border-blue-500"
                         />
                         <button
                             type="submit"
                             disabled={loading}
-                            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors disabled:opacity-50"
+                            className="bg-blue-600 hover:bg-blue-300 text-white px-6 py-2 rounded-lg font-medium transition-colors disabled:opacity-50"
                         >
                             {loading ? 'Searching...' : 'Search'}
                         </button>
                     </form>
                 </div>
-
-                {userData.map((data) => <UserCard userData={data} />)}
+                {userData?.map((data) => <UserCard userData={data} />)}
             </div>
         </div>
     );
@@ -114,7 +66,7 @@ function UserSearch() {
 
 function UserCard({ userData }) {
     return (
-        <Link to={'/profile'} >
+        <Link to={`/profile/${userData.epicNumber}`} >
         <div className="bg-[#212121] rounded-lg p-6 mb-8 shadow-xl">
             <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -130,7 +82,7 @@ function UserCard({ userData }) {
                 </div>
                 <div className="space-y-2">
                     <p className="text-gray-300">
-                        <span className="font-medium text-gray-400">Age:</span> {userData.age}
+                        <span className="font-medium text-gray-400">DOB:</span> {userData.dob}
                     </p>
                     <p className="text-gray-300">
                         <span className="font-medium text-gray-400">Gender:</span> {userData.gender}
