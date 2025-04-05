@@ -9,8 +9,8 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import UserStatus from "@/pages/UserStatus.jsx";
 
-const API = import.meta.env.VITE_API_URL;
-const API_BASE_URL = `${API}/api/`;
+
+const API_BASE_URL = 'http://localhost:5000/api';
 
 const blo =  {
   name: "Amit Verma",
