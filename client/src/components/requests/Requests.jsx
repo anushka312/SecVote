@@ -1,27 +1,29 @@
-import { useState } from "react"
+// Request.jsx
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
   DialogTitle,
   DialogDescription,
   DialogFooter,
-} from "@/components/ui/dialog"
-import { Button } from "@/components/ui/Button"
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import {
   X,
-  Hash,
-  User,
-  Tag,
   Calendar,
-  CheckCircle,
   Filter,
   ChevronDown,
   ChevronUp,
-} from "lucide-react"
+  Hash,
+  User,
+  Mail,
+  AlertTriangle,
+} from "lucide-react";
+import axios from "axios";
 
-// Simple multi-select with tags and a dropdown
+// MultiSelect component for filtering by classification type
 function MultiSelect({ options, selectedValues, onChange, placeholder, icon }) {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   return (
     <div className="relative w-full md:w-1/3">
@@ -37,8 +39,8 @@ function MultiSelect({ options, selectedValues, onChange, placeholder, icon }) {
                 {val}
                 <button
                   onClick={(e) => {
-                    e.stopPropagation()
-                    onChange(selectedValues.filter((v) => v !== val))
+                    e.stopPropagation();
+                    onChange(selectedValues.filter((v) => v !== val));
                   }}
                 >
                   <X className="w-3 h-3" />
@@ -51,20 +53,16 @@ function MultiSelect({ options, selectedValues, onChange, placeholder, icon }) {
         </div>
         {open ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
       </button>
-
       {open && (
         <div className="absolute mt-1 w-full bg-[#1e1e1e] p-2 rounded shadow-lg z-50 max-h-60 overflow-y-auto">
           {options.map((option) => (
-            <label
-              key={option}
-              className="flex items-center gap-2 p-1 hover:bg-[#252525] rounded cursor-pointer"
-            >
+            <label key={option} className="flex items-center gap-2 p-1 hover:bg-[#252525] rounded cursor-pointer">
               <input
                 type="checkbox"
                 checked={selectedValues.includes(option)}
                 onChange={(e) => {
-                  if (e.target.checked) onChange([...selectedValues, option])
-                  else onChange(selectedValues.filter((v) => v !== option))
+                  if (e.target.checked) onChange([...selectedValues, option]);
+                  else onChange(selectedValues.filter((v) => v !== option));
                 }}
               />
               {option}
@@ -73,25 +71,25 @@ function MultiSelect({ options, selectedValues, onChange, placeholder, icon }) {
         </div>
       )}
     </div>
-  )
+  );
 }
 
-// Assign a background color for each status
-function getStatusColor(status) {
-  switch (status) {
-    case "Urgent":       return "bg-red-600"
-    case "Rejected":     return "bg-gray-600"
-    case "Completed":    return "bg-green-600"
-    case "Pending":      return "bg-yellow-600"
-    case "In Progress":  return "bg-blue-600"
-    case "Resolved":     return "bg-teal-600"
-    case "Escalated":    return "bg-purple-600"
-    default:             return "bg-gray-500"
-  }
-}
+// Compute classification from the detailed issue text
+const classifyIssue = (text) => {
+  const lower = text.toLowerCase();
+  if (lower.includes("slot")) return "Slot Allocation";
+  if (lower.includes("id correction") || lower.includes("voter id")) return "ID Correction";
+  if (lower.includes("address") || lower.includes("mailing")) return "Mailing Address Update";
+  if (lower.includes("information") || lower.includes("inquiry")) return "Information Request";
+  if (lower.includes("technical") || lower.includes("error") || lower.includes("bug")) return "Technical Issue";
+  if (lower.includes("complaint")) return "Complaint";
+  if (lower.includes("grievance")) return "Grievance";
+  if (lower.includes("volunteer")) return "Volunteer Signup";
+  return "Other";
+};
 
-// Dummy data arrays
-const requestTypes = [
+// Define the classification types for filtering
+const classificationTypes = [
   "Slot Allocation",
   "Grievance",
   "ID Correction",
@@ -101,150 +99,152 @@ const requestTypes = [
   "Complaint",
   "Volunteer Signup",
   "Other",
-]
-const requestStatuses = [
-  "Urgent",
-  "Rejected",
-  "Completed",
-  "Pending",
-  "In Progress",
-  "Resolved",
-  "Escalated",
-]
-const requestDescriptions = [
-  "Request for urgent slot allocation due to scheduling conflicts.",
-  "Voter reported an error in voter ID details.",
-  "Update needed for mailing address changes.",
-  "Inquiry about election procedures.",
-  "Complaint regarding long queues and understaffing.",
-  "Technical issue encountered during login.",
-  "Request to volunteer at the polling station.",
-  "Escalation due to repeated processing errors.",
-  "General inquiry about absentee ballots.",
-]
+];
 
-// Generate 50 dummy requests
-function generateDummyRequests(count) {
-  const requests = []
-  for (let i = 1; i <= count; i++) {
-    const requestId = `R${String(i).padStart(3, "0")}`
-    const epicNo = `EPIC-${Math.floor(10000 + Math.random() * 90000)}`
-    const type = requestTypes[Math.floor(Math.random() * requestTypes.length)]
-    const status = requestStatuses[Math.floor(Math.random() * requestStatuses.length)]
-    const description =
-      requestDescriptions[Math.floor(Math.random() * requestDescriptions.length)]
-    const day = 1 + Math.floor(Math.random() * 28)
-    const date = `2025-03-${String(day).padStart(2, "0")}`
-
-    requests.push({ requestId, epicNo, type, date, status, description })
+// Assign a background color for each classification type
+const getTypeColor = (type) => {
+  switch (type) {
+    case "Slot Allocation": return "bg-indigo-600";
+    case "Grievance": return "bg-red-600";
+    case "ID Correction": return "bg-orange-600";
+    case "Mailing Address Update": return "bg-blue-600";
+    case "Information Request": return "bg-teal-600";
+    case "Technical Issue": return "bg-purple-600";
+    case "Complaint": return "bg-pink-600";
+    case "Volunteer Signup": return "bg-green-600";
+    case "Other": return "bg-gray-600";
+    default: return "bg-gray-500";
   }
-  return requests
-}
-const dummyRequests = generateDummyRequests(50)
+};
 
 export default function Requests() {
-  const [selectedRequestTypes, setSelectedRequestTypes] = useState([])
-  const [selectedStatuses, setSelectedStatuses] = useState([])
-  const [filtered, setFiltered] = useState(dummyRequests)
-  const [selectedRequest, setSelectedRequest] = useState(null)
+  const [requests, setRequests] = useState([]);
+  const [filtered, setFiltered] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedTypes, setSelectedTypes] = useState([]);
+  const [sortOrder, setSortOrder] = useState("desc"); // 'desc' = newest-to-oldest, 'asc' = oldest-to-newest
+  const [selectedRequest, setSelectedRequest] = useState(null);
 
-  // Apply filters to the dummyRequests
+  useEffect(() => {
+    const fetchIssues = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/issues");
+        // response.data has the original fields from the schema: epic, name, email, issue, createdAt.
+        setRequests(response.data);
+        setFiltered(response.data);
+      } catch (error) {
+        console.error("Error fetching issues:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchIssues();
+  }, []);
+
+  // Apply filtering and sorting
   const handleFilter = () => {
-    setFiltered(
-      dummyRequests.filter((req) => {
-        const matchType = selectedRequestTypes.length
-          ? selectedRequestTypes.includes(req.type)
-          : true
-        const matchStatus = selectedStatuses.length
-          ? selectedStatuses.includes(req.status)
-          : true
-        return matchType && matchStatus
-      })
-    )
-  }
+    let filteredData = [...requests];
+    if (selectedTypes.length) {
+      filteredData = filteredData.filter((req) =>
+        selectedTypes.includes(classifyIssue(req.issue))
+      );
+    }
+    filteredData.sort((a, b) => {
+      const dateA = new Date(a.createdAt);
+      const dateB = new Date(b.createdAt);
+      return sortOrder === "desc" ? dateB - dateA : dateA - dateB;
+    });
+    setFiltered(filteredData);
+  };
 
-  // Press Enter on a focused row to open the dialog
-  const handleRowKeyDown = (e, req) => {
-    if (e.key === "Enter") setSelectedRequest(req)
-  }
+  useEffect(() => {
+    handleFilter();
+  }, [selectedTypes, sortOrder, requests]);
 
   return (
     <div className="p-8 md:p-16 mx-auto bg-[#121212] text-white min-h-screen">
       <h1 className="text-5xl font-extrabold text-gray-100 mb-8">Requests</h1>
-
-      {/* Filters */}
+      
+      {/* Filter Controls */}
       <div className="flex flex-col md:flex-row gap-4 mb-6 items-center">
         <MultiSelect
-          options={requestTypes}
-          selectedValues={selectedRequestTypes}
-          onChange={setSelectedRequestTypes}
+          options={classificationTypes}
+          selectedValues={selectedTypes}
+          onChange={setSelectedTypes}
           placeholder="Filter by Request Type"
           icon={<Filter className="w-4 h-4" />}
         />
-        <MultiSelect
-          options={requestStatuses}
-          selectedValues={selectedStatuses}
-          onChange={setSelectedStatuses}
-          placeholder="Filter by Status"
-          icon={<Filter className="w-4 h-4" />}
-        />
-        <Button
-          onClick={handleFilter}
-          className="bg-[#5A96E3] hover:bg-[#7D67D2] text-white font-semibold py-2 px-6 rounded-xl"
-        >
-          Filter
-        </Button>
+        <div className="w-full md:w-1/3">
+          <select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+            className="w-full p-2 border rounded bg-[#0f3460] text-white"
+          >
+            <option value="desc">Newest to Oldest</option>
+            <option value="asc">Oldest to Newest</option>
+          </select>
+        </div>
       </div>
-
-      {/* Table */}
+      
+      {/* Requests Table */}
       <div className="bg-[#1e1e1e] rounded-xl shadow-lg">
-        {/* Header */}
+        {/* Table Header with Icons */}
         <div className="grid grid-cols-5 gap-4 font-semibold border-b border-gray-700 p-4 sticky top-0 bg-[#1e1e1e] z-10">
-          <div className="flex items-center gap-2">
-            <Hash className="w-4 h-4" /> Request ID
+          <div className="flex items-center gap-1">
+            <Hash className="w-4 h-4 text-white" />
+            <span>EPIC</span>
           </div>
-          <div className="flex items-center gap-2">
-            <User className="w-4 h-4 text-green-500" /> EPIC No
+          <div className="flex items-center gap-1">
+            <User className="w-4 h-4 text-green-500" />
+            <span>Name</span>
           </div>
-          <div className="flex items-center gap-2">
-            <Tag className="w-4 h-4 text-blue-500" /> Type
+          <div className="flex items-center gap-1">
+            <Mail className="w-4 h-4 text-yellow-500" />
+            <span>Email</span>
           </div>
-          <div className="flex items-center gap-2">
-            <Calendar className="w-4 h-4 text-red-500" /> Date
+          <div className="flex items-center gap-1">
+            <AlertTriangle className="w-4 h-4 text-red-500" />
+            <span>Issue</span>
           </div>
-          <div className="flex items-center gap-2">
-            <CheckCircle className="w-4 h-4 text-yellow-500" /> Status
+          <div className="flex items-center gap-1">
+            <Calendar className="w-4 h-4 text-blue-500" />
+            <span>Date</span>
           </div>
         </div>
-        {/* Body (scrollable) */}
         <div className="max-h-80 overflow-y-auto custom-scrollbar">
-          {filtered.map((req) => (
-            <div
-              key={req.requestId}
-              tabIndex={0}
-              onDoubleClick={() => setSelectedRequest(req)}
-              onKeyDown={(e) => handleRowKeyDown(e, req)}
-              className="grid grid-cols-5 gap-4 p-4 border-b border-gray-700 cursor-pointer hover:bg-[#252525] transition-colors focus:outline-none focus:bg-[#2a2a2a]"
-            >
-              <div>{req.requestId}</div>
-              <div>{req.epicNo}</div>
-              <div>{req.type}</div>
-              <div>{req.date}</div>
-              <div>
-                <span className={`px-2 py-1 rounded ${getStatusColor(req.status)} text-white`}>
-                  {req.status}
-                </span>
-              </div>
-            </div>
-          ))}
-          {!filtered.length && (
+          {loading ? (
+            <div className="text-center p-4">Loading issues...</div>
+          ) : filtered.length ? (
+            filtered.map((req) => {
+              // Compute classification from the detailed issue text for table display
+              const classification = classifyIssue(req.issue);
+              return (
+                <div
+                  key={req._id}
+                  tabIndex={0}
+                  onDoubleClick={() => setSelectedRequest(req)}
+                  className="grid grid-cols-5 gap-4 p-4 border-b border-gray-700 cursor-pointer hover:bg-[#252525] transition-colors focus:outline-none focus:bg-[#2a2a2a]"
+                >
+                  <div>{req.epic}</div>
+                  <div>{req.name}</div>
+                  <div>{req.email}</div>
+                  <div>
+                    <span className={`px-2 py-1 rounded ${getTypeColor(classification)} text-white`}>
+                      {classification}
+                    </span>
+                  </div>
+                  <div>{new Date(req.createdAt).toLocaleDateString()}</div>
+                </div>
+              );
+            })
+          ) : (
             <div className="text-center text-gray-400 p-4">No requests found.</div>
           )}
         </div>
       </div>
-
-      {/* Dialog (no top-right X) */}
-      <Dialog open={!!selectedRequest} onOpenChange={(o) => !o && setSelectedRequest(null)}>
+      
+      {/* Popup Dialog for Request Details */}
+      <Dialog open={!!selectedRequest} onOpenChange={(open) => !open && setSelectedRequest(null)}>
         <DialogContent className="bg-[#1e1e1e] text-white border-none shadow-2xl rounded-lg p-6">
           {selectedRequest && (
             <>
@@ -256,30 +256,23 @@ export default function Requests() {
               </div>
               <div className="space-y-2">
                 <p>
-                  <span className="font-semibold">Request ID:</span> {selectedRequest.requestId}
+                  <span className="font-semibold">EPIC:</span> {selectedRequest.epic}
                 </p>
                 <p>
-                  <span className="font-semibold">EPIC No:</span> {selectedRequest.epicNo}
+                  <span className="font-semibold">Name:</span> {selectedRequest.name}
                 </p>
                 <p>
-                  <span className="font-semibold">Type:</span> {selectedRequest.type}
+                  <span className="font-semibold">Email:</span> {selectedRequest.email}
                 </p>
                 <p>
-                  <span className="font-semibold">Date:</span> {selectedRequest.date}
+                  <span className="font-semibold">Issue:</span> {selectedRequest.issue}
                 </p>
                 <p>
-                  <span className="font-semibold">Status:</span> {selectedRequest.status}
-                </p>
-                <p>
-                  <span className="font-semibold">Description:</span> {selectedRequest.description}
+                  <span className="font-semibold">Submitted On:</span> {new Date(selectedRequest.createdAt).toLocaleString()}
                 </p>
               </div>
               <DialogFooter className="mt-6">
-                <Button
-                  variant="outline"
-                  onClick={() => setSelectedRequest(null)}
-                  className="flex gap-2"
-                >
+                <Button variant="outline" onClick={() => setSelectedRequest(null)} className="flex gap-2">
                   <X className="w-4 h-4" />
                   Close
                 </Button>
@@ -289,5 +282,5 @@ export default function Requests() {
         </DialogContent>
       </Dialog>
     </div>
-  )
+  );
 }

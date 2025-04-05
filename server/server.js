@@ -4,9 +4,11 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import dotenv from 'dotenv'
 
-dotenv.config({path: './.env'})
+dotenv.config();
+// console.log(`Hello : ${process.env.MONGODB_URI}`);
 
-mongoose.connect(`${process.env.MONGODB_URI}/civic`)
+// mongoose.connect(`${process.env.MONGODB_URI}/civic`)
+mongoose.connect(`mongodb+srv://pnkfun316:Pnk%40mgdb123@cluster0.japhwka.mongodb.net/civic`)
     .then(() => console.log("MongoDB connected"))
     .catch((error) => console.log(error));
 
@@ -27,9 +29,19 @@ app.use(express.json());
 
 
 import userRouter from './routes/user.routes.js'
+import { getIssues, getVoterById, searchVoters, submitIssue } from "./controllers/voter.controller.js";
 
 
-app.use('/api/user/', userRouter)
+app.use('/api/user/', userRouter);
+
+// Voter - Routes
+app.get('/api/getvoter/:id', getVoterById);
+
+app.get('/api/voter/search', searchVoters);
+
+app.post('/api/issues', submitIssue);
+
+app.get('/api/issues', getIssues);
 
 
 app.get('/', async (req, res) => {
