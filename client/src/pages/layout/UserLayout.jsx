@@ -13,7 +13,7 @@ const UserLayout = () => {
                     <NavBar isAdmin={isAdmin} setIsAdmin={setIsAdmin}/>
                 </div>
                 <div className='bg-green-600 flex-1'>
-                    <Outlet />
+                    <Outlet  isAdmin={isAdmin} setIsAdmin={setIsAdmin}/>
                 </div>
                 <div>
                     <Footer />

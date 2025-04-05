@@ -46,7 +46,7 @@ function App() {
           element={<UserLayout />}
         >
           <Route path='' element={<Landing />} />
-          <Route path='user-status' element={<UserStatusAdmin />} />
+          <Route path='user-status/:id' element={<UserStatusAdmin />} />
           <Route path='profile/:id' element={<Profile />} />
           <Route path='search' element={<UserSearch />} />
           <Route path='station/:id' element={<PollingStation />} />

@@ -19,6 +19,7 @@ import {
   ChevronUp,
 } from "lucide-react"
 import axios from "axios"
+import UserIssueCard from "../UserIssueCard.jsx"
 
 // Simple multi-select with tags and a dropdown
 function MultiSelect({ options, selectedValues, onChange, placeholder, icon }) {
@@ -187,8 +188,8 @@ export default function Requests() {
   // }
 
   return (
-    <div className="p-8 md:p-16 mx-auto bg-[#121212] text-white min-h-screen">
-      <h1 className="text-5xl font-extrabold text-gray-100 mb-8">Requests</h1>
+    <div className="p-8 mx-auto bg-[#121212] text-white min-h-screen">
+      <h1 className="text-3xl font-extrabold text-center text-gray-100 mb-8">Issue Requests Raised By Voters</h1>
 
       {/* Filters */}
       {/* <div className="flex flex-col md:flex-row gap-4 mb-6 items-center">
@@ -308,9 +309,8 @@ export default function Requests() {
       </Dialog> */}
 
 
-      // Newly Added Code
-      <div className="max-w-lg mx-auto bg-gray-900 p-6 rounded-lg shadow-lg text-white">
-        <h2 className="text-2xl font-bold mb-4">Submitted Issues</h2>
+      {/* // Newly Added Code */}
+      <div className="mx-auto max-w-2xl bg-[#212121] p-6 rounded-lg shadow-lg text-white">
         {loading ? (
           <p>Loading issues...</p>
         ) : requests.length === 0 ? (
@@ -318,15 +318,7 @@ export default function Requests() {
         ) : (
           <ul>
             {requests.map((issue) => (
-              <li key={issue._id} className="border-b border-gray-700 py-2">
-                <p><strong>EPIC:</strong> {issue.epic}</p>
-                <p><strong>Name:</strong> {issue.name}</p>
-                <p><strong>Email:</strong> {issue.email}</p>
-                <p><strong>Issue:</strong> {issue.issue}</p>
-                <p className="text-sm text-gray-400">
-                  Submitted on: {new Date(issue.createdAt).toLocaleString()}
-                </p>
-              </li>
+              <UserIssueCard issue={issue} />
             ))}
           </ul>
         )}

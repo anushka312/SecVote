@@ -3,6 +3,7 @@ import axios from "axios";
 
 
 const initialState = {
+    isAdmin: false,
     isAuthLoading: true,
     isAuthenticated: false,
     isLoading: false,
@@ -13,6 +14,11 @@ export const authSlice = createSlice({
     name: "authSlice",
     initialState,
     reducers: {
+        setIsAdmin: (state, action) => {
+            state.isAdmin = action.payload;
+            console.log("hi");
+            
+        },
         setUser: (state, action) => {
             state.user = action.payload;
         }
@@ -111,6 +117,6 @@ export const logOutUser = createAsyncThunk('auth/logOutUser',
     })
 
 
-export const { setUser } = authSlice.actions;
+export const { setUser, setIsAdmin } = authSlice.actions;
 
 export default authSlice.reducer;
