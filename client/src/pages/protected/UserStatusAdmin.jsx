@@ -1,9 +1,40 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import { CheckCircle2Icon, Clock1Icon } from 'lucide-react';
+import { useParams } from 'react-router-dom';
+import LoadingScreen from '../Loading.jsx';
+import { Button } from '@/components/ui/button.jsx';
 
-const API_BASE_URL = 'http://your-api-url/api';
+const API_BASE_URL = 'http://localhost:5000/api';
+
+
+const statusSteps = [
+    {
+        title: 'Document Verification',
+        status: 'completed',
+        date: '2024-01-15',
+        time: '10:30 AM'
+    },
+    {
+        title: 'Soft Verification',
+        status: 'completed',
+        date: '2024-01-16',
+        time: '2:45 PM'
+    },
+    {
+        title: 'Polling Booth Verification',
+        status: 'completed',
+        date: '2024-01-20',
+        time: '11:15 AM'
+    },
+    {
+        title: 'Voted',
+        status: 'pending',
+        date: 'Scheduled',
+        time: 'Feb 15, 2024'
+    }
+];
 
 const initialStatusSteps = [
     {
@@ -36,28 +67,28 @@ const initialStatusSteps = [
     }
 ];
 
-const UserCard = () => {
+const UserCard = ({ voter }) => {
     return (
         <div className="bg-[#212121] rounded-lg p-6 mb-8 shadow-xl">
             <h2 className="text-2xl font-bold text-white mb-4">Voter Information</h2>
             <div className="grid grid-cols-2 gap-4">
                 <div>
-                    <h3 className="text-xl font-semibold text-white mb-2">Aditya Kumar Jha</h3>
+                    <h3 className="text-xl font-semibold text-white mb-2">{voter?.name}</h3>
                     <div className="space-y-2">
                         <p className="text-gray-300">
-                            <span className="font-medium text-gray-400">Voter ID:</span> DL/07/123456
+                            <span className="font-medium text-gray-400">Voter ID:</span>{voter?.voterId}
                         </p>
                         <p className="text-gray-300">
-                            <span className="font-medium text-gray-400">EPIC Number:</span> EPIC123456789
+                            <span className="font-medium text-gray-400">EPIC Number:</span> {voter?.epicNumber}
                         </p>
                     </div>
                 </div>
                 <div className="space-y-2">
                     <p className="text-gray-300">
-                        <span className="font-medium text-gray-400">Age:</span> 20
+                        <span className="font-medium text-gray-400">DOB:</span> {voter?.dob}
                     </p>
                     <p className="text-gray-300">
-                        <span className="font-medium text-gray-400">Gender:</span> Male
+                        <span className="font-medium text-gray-400">Gender:</span> {voter?.gender}
                     </p>
                 </div>
             </div>
@@ -65,8 +96,8 @@ const UserCard = () => {
     );
 };
 
-const Timeline = ({ statusSteps, onUpdateStatus }) => {
-    const handleStatusUpdate = async (stepId) => {
+const Timeline = ({ statusSteps, onUpdateStatus, voter }) => {
+    const handleStatusUpdate = async (index) => {
         try {
             const currentDate = new Date();
             const formattedDate = currentDate.toISOString().split('T')[0];
@@ -76,15 +107,17 @@ const Timeline = ({ statusSteps, onUpdateStatus }) => {
             });
 
             // Make API call to update status
-            await axios.post(`${API_BASE_URL}/update-status`, {
-                voterId: 'DL/07/123456',
-                stepId,
-                status: 'completed',
-                date: formattedDate,
-                time: formattedTime
+            const response = await axios.post(`${API_BASE_URL}/update-status`, {
+                "voterId": voter.voterId,
+                "statusTimeline": {
+                    "step": index + 1,
+                    "date": formattedDate,
+                    "time": formattedTime,
+                    "status": "Completed"
+                }
             });
-
-            onUpdateStatus(stepId, formattedDate, formattedTime);
+            // console.log(response.data.voter);
+            onUpdateStatus(response.data.voter);
             toast.success('Status updated successfully');
         } catch (error) {
             console.error('Error updating status:', error);
@@ -97,12 +130,12 @@ const Timeline = ({ statusSteps, onUpdateStatus }) => {
             {statusSteps.map((step, index) => (
                 <div key={step.id} className="flex items-start">
                     <div className="flex items-center h-16">
-                        {step.status === 'completed' ? (
+                        {index <= voter?.statusTimeline.step - 1 ? (
                             <CheckCircle2Icon className="w-8 h-8 text-green-500" />
                         ) : (
                             <Clock1Icon className="w-8 h-8 text-gray-400" />
                         )}
-                        {index !== statusSteps.length - 1 && (
+                        {index <= voter?.statusTimeline.step - 1 && (
                             <div className="h-full w-0.5 bg-gray-700 ml-4"></div>
                         )}
                     </div>
@@ -110,27 +143,35 @@ const Timeline = ({ statusSteps, onUpdateStatus }) => {
                         <div className="flex justify-between items-start">
                             <div>
                                 <h3 className="text-lg font-medium text-white">{step.title}</h3>
-                                <div className="text-sm text-gray-400">
-                                    <p>Date: {step.date || 'Not completed'}</p>
-                                    <p>Time: {step.time || 'Not completed'}</p>
-                                </div>
+                                {
+                                    index <= voter?.statusTimeline.step - 1 ?
+                                        <div className="text-sm text-gray-400">
+                                            <p>Date: {voter?.statusTimeline.date}</p>
+                                            <p>Time: {voter?.statusTimeline.time}</p>
+                                        </div>
+                                        :
+                                        <div className="text-sm text-gray-400">
+                                            <p>Date: {'Not completed'}</p>
+                                            <p>Time: {'Not completed'}</p>
+                                        </div>
+                                }
                                 <div className="mt-2">
-                                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${step.status === 'completed'
-                                            ? 'bg-green-900 text-green-300'
-                                            : 'bg-gray-700 text-gray-300'
+                                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${index <= voter?.statusTimeline.step - 1
+                                        ? 'bg-green-900 text-green-300'
+                                        : 'bg-gray-700 text-gray-300'
                                         }`}>
-                                        {step.status === 'completed' ? 'Completed' : 'Pending'}
+                                        {index <= voter?.statusTimeline.step-1 ? 'Completed' : 'Pending'}
                                     </span>
                                 </div>
                             </div>
-                            {step.status !== 'completed' && (
-                                <button
-                                    onClick={() => handleStatusUpdate(step?.id)}
-                                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
-                                    disabled={index > 0 && statusSteps[index - 1].status !== 'completed'}
+                            {index === voter?.statusTimeline.step && (
+                                <Button
+                                    onClick={() => handleStatusUpdate(index)}
+                                    className="bg-gray-600/30 hover:bg-gray-600/20 text-white px-4 py-2 rounded-xl text-sm font-medium transition-colors"
+                                    disabled={index > voter?.statusTimeline.step}
                                 >
                                     Mark as Complete
-                                </button>
+                                </Button>
                             )}
                         </div>
                     </div>
@@ -142,15 +183,40 @@ const Timeline = ({ statusSteps, onUpdateStatus }) => {
 
 function UserStatusAdmin() {
     const [statusSteps, setStatusSteps] = useState(initialStatusSteps);
+    const { id } = useParams();
 
-    const handleUpdateStatus = (stepId, date, time) => {
-        setStatusSteps(prevSteps =>
-            prevSteps.map(step =>
-                step.id === stepId
-                    ? { ...step, status: 'completed', date, time }
-                    : step
-            )
-        );
+    const [voter, setVoter] = useState(null);
+    const [loading, setLoading] = useState(false);
+
+
+    const fetchVoter = async () => {
+        // if (!query.trim()) {
+        //     toast.error('Please enter a Voter ID');
+        //     return;
+        // }
+        try {
+            const response = await axios.get(`${API_BASE_URL}/getvoter/${id}`);
+            setVoter(response.data.voter);
+            toast.success('Voter Info Fetched');
+        } catch (error) {
+            console.error('Error fetching voters:', error);
+            toast.error('voter not found or error occurred');
+            setVoter(null);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchVoter();
+    }, [id])
+
+    if (voter === null || loading) {
+        return <LoadingScreen />
+    }
+
+    const handleUpdateStatus = (voter) => {
+        setVoter(voter);
     };
 
     return (
@@ -159,8 +225,9 @@ function UserStatusAdmin() {
                 <div className="flex justify-between items-center mb-8">
                     <h1 className="text-3xl font-bold text-white">Admin - Voter Status Management</h1>
                 </div>
-                <UserCard />
+                <UserCard voter={voter} />
                 <Timeline
+                    voter={voter}
                     statusSteps={statusSteps}
                     onUpdateStatus={handleUpdateStatus}
                 />

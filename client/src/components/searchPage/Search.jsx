@@ -33,13 +33,13 @@ export default function SearchPage() {
               onChange={(e) => setSearchQuery(e.target.value)}
               className="bg-[#2C2F42] border border-transparent text-white placeholder-gray-400 rounded-lg focus:ring-2 focus:ring-[#5A96E3] transition-all w-full py-3 px-4"
             />
-            <Button
+            {/* <Button
               onClick={handleSearch}
               className="bg-[#5A96E3] hover:bg-[#7D67D2] transition-all text-white font-semibold py-3 px-6 rounded-lg shadow-md"
             >
               <Search className="w-6 h-6 mr-2" />
               Search
-            </Button>
+            </Button> */}
           </div>
 
           {/* Advanced Search Toggle */}

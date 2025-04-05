@@ -29,7 +29,8 @@ app.use(express.json());
 
 
 import userRouter from './routes/user.routes.js'
-import { getIssues, getVoterById, searchVoters, submitIssue } from "./controllers/voter.controller.js";
+import { bookSlot, getAllSlots, getIssues, getVoterById, searchVoters, submitIssue } from "./controllers/voter.controller.js";
+import { updateStatusTimeline } from "./controllers/admin.controller.js";
 
 
 app.use('/api/user/', userRouter);
@@ -39,9 +40,17 @@ app.get('/api/getvoter/:id', getVoterById);
 
 app.get('/api/voter/search', searchVoters);
 
+app.get('/api/issues', getIssues);
+
 app.post('/api/issues', submitIssue);
 
-app.get('/api/issues', getIssues);
+app.get('/api/slots', getAllSlots);
+
+app.post('/api/book-slot', bookSlot);
+
+
+// Admin - Routes
+app.post('/api/update-status', updateStatusTimeline);
 
 
 app.get('/', async (req, res) => {
