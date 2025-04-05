@@ -1,16 +1,9 @@
+// Help.jsx
 import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import {
-  ChevronDown,
-  Mail,
-  MessageCircle,
-  PhoneCall,
-  HelpCircle,
-  Sparkles,
-} from "lucide-react";
+import { ChevronDown, Mail, MessageCircle, PhoneCall, HelpCircle, Sparkles } from "lucide-react";
 import SearchPage from "../searchPage/Search.jsx";
+import axios from "axios";
 
 const faqs = [
   {
@@ -35,7 +28,6 @@ const faqs = [
   },
 ];
 
-
 const RaiseIssue = () => {
   const [formData, setFormData] = useState({
     epic: "",
@@ -57,7 +49,7 @@ const RaiseIssue = () => {
     setMessage("");
 
     try {
-      const response = await axios.post("http://localhost:5000/api/issues", formData);
+      await axios.post("http://localhost:5000/api/issues", formData);
       setMessage("Request submitted successfully!");
       setFormData({ epic: "", name: "", email: "", issue: "" });
     } catch (error) {
@@ -67,18 +59,15 @@ const RaiseIssue = () => {
     }
   };
 
-
   return (
     <div className="space-y-8">
       <div className="bg-[#1e1e1e] p-8 rounded-2xl shadow-xl relative overflow-hidden">
         <h2 className="text-3xl font-extrabold mb-4 flex items-center gap-2 text-white">
           <Sparkles className="text-[#FFD166] w-10 h-10 mr-2" /> Raise Your Issue
         </h2>
-
         <p className="mb-4 text-gray-300 leading-relaxed">
           Our team is ready to assist you with any questions or issues. Submit your request and we’ll respond promptly!
         </p>
-
         <form onSubmit={handleSubmit}>
           <input
             type="text"
@@ -126,14 +115,11 @@ const RaiseIssue = () => {
         {message && <p className="mt-3 text-sm text-center">{message}</p>}
       </div>
     </div>
-  )
-}
-
-
+  );
+};
 
 const Help = () => {
   const [openIndex, setOpenIndex] = useState(null);
-
   const toggleFAQ = (index) => {
     setOpenIndex(openIndex === index ? null : index);
   };
@@ -146,71 +132,57 @@ const Help = () => {
           <h1 className="text-5xl font-extrabold bg-white bg-clip-text text-transparent mb-8">
             How Can We Assist You?
           </h1>
-
           <div className="space-y-6">
             {faqs.map((faq, index) => (
               <div
                 key={index}
                 className="bg-[#1e1e1e] p-6 rounded-xl shadow-lg hover:shadow-xl transition-transform duration-300"
               >
-                <div
-                  className="flex items-center justify-between cursor-pointer"
-                  onClick={() => toggleFAQ(index)}
-                >
+                <div className="flex items-center justify-between cursor-pointer" onClick={() => toggleFAQ(index)}>
                   <h2 className="text-xl font-semibold">{faq.question}</h2>
-                  <ChevronDown
-                    className={`w-6 h-6 transition-transform ${
-                      openIndex === index ? "rotate-180" : ""
-                    }`}
-                  />
+                  <ChevronDown className={`w-6 h-6 transition-transform ${openIndex === index ? "rotate-180" : ""}`} />
                 </div>
-                {openIndex === index && (
-                  <p className="mt-4 text-gray-300">{faq.answer}</p>
-                )}
+                {openIndex === index && <p className="mt-4 text-gray-300">{faq.answer}</p>}
               </div>
             ))}
           </div>
           <SearchPage />
         </div>
-
-      {/* Contact & Support Options */}
-      <RaiseIssue />
-
-
-      {/* Support Options */}
-      <div className="flex flex-col gap-4">
-        <button className="flex items-center gap-4 px-6 py-3 rounded-xl bg-[#1e1e1e] transition duration-300 shadow-md">
-          <Mail className="w-5 h-5 text-yellow-400" /> Email Support
-        </button>
-        <button className="flex items-center gap-4 px-6 py-3 rounded-xl bg-[#1e1e1e] transition duration-300 shadow-md">
-          <MessageCircle className="w-5 h-5 text-green-400" /> Live Chat
-        </button>
-        <button className="flex items-center gap-4 px-6 py-3 rounded-xl bg-[#1e1e1e] transition duration-300 shadow-md">
-          <PhoneCall className="w-5 h-5 text-blue-400" /> Call Us
-        </button>
-      </div>
-
-      {/* Quick Links */}
-      <div className="mt-8">
-        <h3 className="text-xl font-semibold mb-4">Quick Links</h3>
-        <div className="grid grid-cols-2 gap-4">
-          <a href="#" className="flex items-center gap-2 text-pink-400 hover:underline">
-            <HelpCircle /> Voter Guide
-          </a>
-          <a href="#" className="flex items-center gap-2 text-yellow-400 hover:underline">
-            <HelpCircle /> Polling Station
-          </a>
-          <a href="#" className="flex items-center gap-2 text-green-400 hover:underline">
-            <HelpCircle /> ID Requirements
-          </a>
-          <a href="#" className="flex items-center gap-2 text-blue-400 hover:underline">
-            <HelpCircle /> Update Info
-          </a>
+        {/* Contact & Support Options */}
+        <RaiseIssue />
+        {/* Support Options */}
+        <div className="flex flex-col gap-4">
+          <button className="flex items-center gap-4 px-6 py-3 rounded-xl bg-[#1e1e1e] transition duration-300 shadow-md">
+            <Mail className="w-5 h-5 text-yellow-400" /> Email Support
+          </button>
+          <button className="flex items-center gap-4 px-6 py-3 rounded-xl bg-[#1e1e1e] transition duration-300 shadow-md">
+            <MessageCircle className="w-5 h-5 text-green-400" /> Live Chat
+          </button>
+          <button className="flex items-center gap-4 px-6 py-3 rounded-xl bg-[#1e1e1e] transition duration-300 shadow-md">
+            <PhoneCall className="w-5 h-5 text-blue-400" /> Call Us
+          </button>
+        </div>
+        {/* Quick Links */}
+        <div className="mt-8">
+          <h3 className="text-xl font-semibold mb-4">Quick Links</h3>
+          <div className="grid grid-cols-2 gap-4">
+            <a href="#" className="flex items-center gap-2 text-pink-400 hover:underline">
+              <HelpCircle /> Voter Guide
+            </a>
+            <a href="#" className="flex items-center gap-2 text-yellow-400 hover:underline">
+              <HelpCircle /> Polling Station
+            </a>
+            <a href="#" className="flex items-center gap-2 text-green-400 hover:underline">
+              <HelpCircle /> ID Requirements
+            </a>
+            <a href="#" className="flex items-center gap-2 text-blue-400 hover:underline">
+              <HelpCircle /> Update Info
+            </a>
+          </div>
         </div>
       </div>
-    </div>
     </>
   );
-}
+};
 
 export default Help;
