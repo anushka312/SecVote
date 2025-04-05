@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 
 
 const API_BASE_URL = 'http://localhost:5000/api';
 
 function UserSearch() {
+    const { isAdmin } = useSelector(state => state.auth);
+
     const [query, setQuery] = useState('');
     const [userData, setUserData] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -46,27 +49,27 @@ function UserSearch() {
                             value={query}
                             // onChange={(e) => setQuery(e.target.value)}
                             onChange={(e) => handleSearch(e)}
-                            placeholder="Enter Voter ID"
+                            placeholder="Type Voter ID"
                             className="flex-1 bg-gray-800 text-white rounded-lg px-4 py-2 border border-gray-700 focus:outline-none focus:border-blue-500"
                         />
-                        <button
+                        {/* <button
                             type="submit"
                             disabled={loading}
                             className="bg-blue-600 hover:bg-blue-300 text-white px-6 py-2 rounded-lg font-medium transition-colors disabled:opacity-50"
                         >
                             {loading ? 'Searching...' : 'Search'}
-                        </button>
+                        </button> */}
                     </form>
                 </div>
-                {userData?.map((data) => <UserCard userData={data} />)}
+                {userData?.map((data) => <UserCard userData={data} isAdmin={isAdmin}/>)}
             </div>
         </div>
     );
 }
 
-function UserCard({ userData }) {
+function UserCard({ userData, isAdmin }) {
     return (
-        <Link to={`/profile/${userData.epicNumber}`} >
+        <Link to={`/${isAdmin ? 'user-status' : 'profile'}/${userData.epicNumber}`} >
         <div className="bg-[#212121] rounded-lg p-6 mb-8 shadow-xl">
             <div className="grid grid-cols-2 gap-4">
                 <div>

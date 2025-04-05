@@ -65,19 +65,19 @@ export default function ProfilePage() {
         {/* Left Sidebar - voter Info & Settings */}
         <div className="bg-[#1b1b1b] p-6 rounded-2xl flex flex-col items-center space-y-5 w-full relative">
           {/* Profile Picture Section */}
-          <div className="relative w-32 h-32">
+          {/* <div className="relative w-32 h-32"> */}
             {/* Profile Image with Placeholder and Background Color */}
-            <img
+            {/* <img
               src={profile}
               alt="Profile"
               className="w-full h-full rounded-full border-4 border-[#FFD166] bg-gray-800 object-cover"
-            />
+            /> */}
 
             {/* Edit Profile Button */}
             {/* <button className="absolute bottom-2 right-2 bg-[#5A96E3] p-2 rounded-full shadow-md hover:bg-[#7D67D2] transition">
               <Camera className="w-5 h-5 text-white" />
             </button> */}
-          </div>
+          {/* </div> */}
 
 
           <h2 className="text-3xl font-bold">{voter?.name}</h2>
