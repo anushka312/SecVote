@@ -6,7 +6,8 @@ import { useParams } from 'react-router-dom';
 import LoadingScreen from '../Loading.jsx';
 import { Button } from '@/components/ui/button.jsx';
 
-const API_BASE_URL = 'http://localhost:5000/api';
+const API = import.meta.env.VITE_API_URL;
+const API_BASE_URL = `${API}/api`;
 
 
 const statusSteps = [
