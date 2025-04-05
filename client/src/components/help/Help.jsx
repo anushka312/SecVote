@@ -47,9 +47,10 @@ const RaiseIssue = () => {
     e.preventDefault();
     setLoading(true);
     setMessage("");
-
+    const API = import.meta.env.VITE_API_URL;
+    
     try {
-      await axios.post("http://localhost:5000/api/issues", formData);
+      await axios.post(`${API}/api/issues`, formData);
       setMessage("Request submitted successfully!");
       setFormData({ epic: "", name: "", email: "", issue: "" });
     } catch (error) {

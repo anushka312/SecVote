@@ -7,8 +7,7 @@ import dotenv from 'dotenv'
 dotenv.config();
 // console.log(`Hello : ${process.env.MONGODB_URI}`);
 
-// mongoose.connect(`${process.env.MONGODB_URI}/civic`)
-mongoose.connect(`mongodb+srv://pnkfun316:Pnk%40mgdb123@cluster0.japhwka.mongodb.net/civic`)
+mongoose.connect(`${process.env.MONGODB_URI}/civic`)
     .then(() => console.log("MongoDB connected"))
     .catch((error) => console.log(error));
 

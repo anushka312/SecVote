@@ -7,7 +7,8 @@ import { Link } from "react-router-dom";
 import profileIcon from "../assets/profile.png"; // Import profile icon
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:5000/api"; // replace with your backend URL
+const API = import.meta.env.VITE_API_URL;
+const API_BASE_URL = `${API}/api` // replace with your backend URL
 
 
 export default function SlotBooking() {
@@ -47,13 +48,13 @@ export default function SlotBooking() {
   const [registeredSlot, setRegisteredSlot] = useState(null);
   const [confirmSlot, setConfirmSlot] = useState(null);
 
-  // const [searchTerm, setSearchTerm] = useState("");
-  // const [registrationCounts, setRegistrationCounts] = useState(() => {
-  //   return JSON.parse(localStorage.getItem("registrationCounts")) || {};
-  // });
-  // const [totalRegistrations, setTotalRegistrations] = useState(() => {
-  //   return parseInt(localStorage.getItem("totalRegistrations")) || 0;
-  // });
+  const [searchTerm, setSearchTerm] = useState("");
+  const [registrationCounts, setRegistrationCounts] = useState(() => {
+    return JSON.parse(localStorage.getItem("registrationCounts")) || {};
+  });
+  const [totalRegistrations, setTotalRegistrations] = useState(() => {
+    return parseInt(localStorage.getItem("totalRegistrations")) || 0;
+  });
 
 
   const handleRegister = (slot) => {
@@ -64,31 +65,31 @@ export default function SlotBooking() {
     }
   };
 
-  // const confirmRegistration = () => {
-  //   if (confirmSlot && !registeredSlot) {
-  //     setRegisteredSlot(confirmSlot);
-  //     localStorage.setItem("registeredSlot", confirmSlot);
-  //     setConfirmSlot(null);
+  const confirmRegistration = () => {
+    if (confirmSlot && !registeredSlot) {
+      setRegisteredSlot(confirmSlot);
+      localStorage.setItem("registeredSlot", confirmSlot);
+      setConfirmSlot(null);
 
-  //     setRegistrationCounts((prevCounts) => {
-  //       const newCounts = { ...prevCounts, [confirmSlot]: (prevCounts[confirmSlot] || 0) + 1 };
-  //       localStorage.setItem("registrationCounts", JSON.stringify(newCounts));
-  //       return newCounts;
-  //     });
+      setRegistrationCounts((prevCounts) => {
+        const newCounts = { ...prevCounts, [confirmSlot]: (prevCounts[confirmSlot] || 0) + 1 };
+        localStorage.setItem("registrationCounts", JSON.stringify(newCounts));
+        return newCounts;
+      });
 
-  //     setTotalRegistrations((prevTotal) => {
-  //       const newTotal = prevTotal + 1;
-  //       localStorage.setItem("totalRegistrations", newTotal);
-  //       return newTotal;
-  //     });
+      setTotalRegistrations((prevTotal) => {
+        const newTotal = prevTotal + 1;
+        localStorage.setItem("totalRegistrations", newTotal);
+        return newTotal;
+      });
 
-  //     toast.success(`Successfully registered for ${confirmSlot}!`, { duration: 5000, style: { background: "#333", color: "#fff" } });
-  //   }
-  // };
+      toast.success(`Successfully registered for ${confirmSlot}!`, { duration: 5000, style: { background: "#333", color: "#fff" } });
+    }
+  };
 
-  // const filteredSlots = slots.filter((slot) =>
-  //   slot.slot.toLowerCase().includes(searchTerm.toLowerCase())
-  // );
+  const filteredSlots = slots.filter((slot) =>
+    slot.slot.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
 
   useEffect(() => {
@@ -106,7 +107,7 @@ export default function SlotBooking() {
       </div>
 
       {/* Stats & Search Bar */}
-      {/* <div className="w-full max-w-3xl mb-6">
+      <div className="w-full max-w-3xl mb-6">
         <div className="flex justify-between items-center bg-[#1e1e1e] p-4 rounded-lg shadow-lg">
           <p className="text-lg font-semibold text-white">
             Total Registrations: {totalRegistrations}
@@ -122,7 +123,7 @@ export default function SlotBooking() {
             />
           </div>
         </div>
-      </div> */}
+      </div>
 
       {/* Slot List */}
       <div className="w-full max-w-3xl space-y-4">
@@ -131,7 +132,7 @@ export default function SlotBooking() {
             key={index}
             className={cn(
               "flex items-center justify-between p-5 border rounded-lg shadow-md bg-[#1e1e1e] transition-transform transform hover:scale-105 border-gray-600"
-              // , registeredSlot === slot ? "border-[#7D67D2] bg-[#2C2F42]" : "border-gray-600"
+              , registeredSlot === slot ? "border-[#7D67D2] bg-[#2C2F42]" : "border-gray-600"
             )}
           >
             <div className="flex items-center gap-3">
@@ -148,7 +149,7 @@ export default function SlotBooking() {
                 Register
               </Button>
             </div>
-            {/* <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4">
               <span className="text-gray-300">Registrations: {registrationCounts[slot] || 0}</span>
               {registeredSlot === slot ? (
                 <div className="flex items-center gap-2 text-[#3FB950] font-semibold">
@@ -163,7 +164,7 @@ export default function SlotBooking() {
                   Register
                 </Button>
               )}
-            </div> */}
+            </div>
           </div>
         ))}
 

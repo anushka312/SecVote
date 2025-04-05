@@ -126,9 +126,11 @@ export default function Requests() {
   const [selectedRequest, setSelectedRequest] = useState(null);
 
   useEffect(() => {
+    const API = import.meta.env.VITE_API_URL;
+
     const fetchIssues = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/issues");
+        const response = await axios.get(`${API}/api/issues`);
         // response.data has the original fields from the schema: epic, name, email, issue, createdAt.
         setRequests(response.data);
         setFiltered(response.data);
