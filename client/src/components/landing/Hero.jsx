@@ -14,7 +14,7 @@ const Hero = () => {
           Secure. Transparent. <span className="text-[#5A96E3] glow">Empowered.</span>
         </h1>
         <p className="text-lg text-gray-300 mt-4 max-w-2xl mx-auto">
-          Vote with confidence using <span className="text-[#7D67D2] font-semibold">SecVote</span>, India's most secure and transparent digital voting system.
+          Vote with confidence using <span className="text-[#7D67D2] font-semibold">SecVote</span>, India's most secure and transparent digital electoral management and information sytem.
         </p>
 
         {/* Call to Action */}

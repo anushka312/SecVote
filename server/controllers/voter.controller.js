@@ -2,6 +2,10 @@ import { Booking } from "../models/Booking.js";
 import Issue from "../models/Request.js";
 import { Slot } from "../models/Slot.js";
 import { Voter } from "../models/Voter.js";
+import { GoogleGenAI } from "@google/genai";
+
+// Initialize the Gemini API client with your API key.
+const ai = new GoogleGenAI({ apiKey: "AIzaSyDIBvRe5QimPcvCvHdYWyx5Ev66kCWZe6U" });
 
 const getVoterById = async (req, res) => {
   try {
@@ -42,19 +46,52 @@ const searchVoters = async (req, res) => {
   }
 };
 
+
 const submitIssue = async (req, res) => {
-  try {
-    const { epic, name, email, issue } = req.body;
-    if (!epic || !name || !email || !issue) {
-      return res.status(400).json({ message: "All fields are required." });
+    try {
+      const { epic, name, email, issue, confirm } = req.body;
+      if (!epic || !name || !email || !issue) {
+        return res.status(400).json({ message: "All fields are required." });
+      }
+  
+      // If the request is not yet confirmed, call the Gemini API.
+      if (!confirm) {
+        // Build a context-aware prompt including SecVote details.
+        const secVoteContext = `
+  SecVote is our Automated Voter Verification Management System—a comprehensive digital platform that handles voter verification, crowd management, slot booking, and real-time tracking for polling booths. It replaces manual processes with secure, efficient, and scalable digital solutions. Key features include:
+  • Automated Verification using QR code scanning and biometric authentication.
+  • Efficient Slot Booking with pre-assigned voting times.
+  • Integrated Fresh Voter Handling with validation against state electoral rolls.
+  • Robust Grievance Handling through an admin dashboard and Gemini API-powered chat assistant.
+  • Real-Time Tracking for both voters and administrators.
+        `.trim();
+  
+        const prompt = `
+  ${secVoteContext}
+  
+  A voter has submitted the following issue: "${issue}"
+  
+  Please generate a detailed, context-aware response addressing this issue. Explain potential reasons, steps for resolution, and reference the SecVote functionalities where relevant.
+        `.trim();
+  
+        const response = await ai.models.generateContent({
+          model: "gemini-2.0-flash",
+          contents: prompt,
+        });
+        // Return the Gemini API's response to the client.
+        return res.status(200).json({ geminiResponse: response.text });
+      } else {
+        // When confirmed, create the Issue in the database.
+        const newIssue = await Issue.create({ epic, name, email, issue });
+        return res.status(201).json({ message: "Issue submitted successfully!" });
+      }
+    } catch (error) {
+      console.error("Error in submitIssue:", error);
+      res.status(500).json({ message: "Internal Server Error" });
     }
-    const newIssue = await Issue.create({ epic, name, email, issue });
-    res.status(201).json({ message: "Issue submitted successfully!" });
-  } catch (error) {
-    console.error("Error in submitIssue:", error);
-    res.status(500).json({ message: "Internal Server Error" });
-  }
-};
+  };
+  
+
 
 const getIssues = async (req, res) => {
   try {

@@ -1,9 +1,11 @@
 // Help.jsx
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, Mail, MessageCircle, PhoneCall, HelpCircle, Sparkles } from "lucide-react";
+import { Dialog, DialogContent, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { ChevronDown, Mail, MessageCircle, PhoneCall, HelpCircle, Sparkles, X } from "lucide-react";
 import SearchPage from "../searchPage/Search.jsx";
 import axios from "axios";
+import ReactMarkdown from "react-markdown";
 
 const faqs = [
   {
@@ -35,27 +37,44 @@ const RaiseIssue = () => {
     email: "",
     issue: "",
   });
-
   const [loading, setLoading] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [showGeminiModal, setShowGeminiModal] = useState(false);
+  const [geminiResponse, setGeminiResponse] = useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // Step 1: Call backend to review the issue via Gemini
+  const handleGeminiReview = async () => {
     setLoading(true);
     setMessage("");
-
     try {
-      await axios.post("http://localhost:5000/api/issues", formData);
-      setMessage("Request submitted successfully!");
+      // Send the form data with confirm flag set to false.
+      const response = await axios.post("http://localhost:5000/api/issues", { ...formData, confirm: false });
+      setGeminiResponse(response.data.geminiResponse);
+      setShowGeminiModal(true);
+    } catch (error) {
+      setMessage("Failed to review your issue with Gemini. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Step 2: If the user confirms, submit the issue officially.
+  const handleConfirmSubmit = async () => {
+    setConfirmLoading(true);
+    try {
+      const response = await axios.post("http://localhost:5000/api/issues", { ...formData, confirm: true });
+      setMessage(response.data.message);
       setFormData({ epic: "", name: "", email: "", issue: "" });
+      setShowGeminiModal(false);
     } catch (error) {
       setMessage("Failed to submit issue. Please try again.");
     } finally {
-      setLoading(false);
+      setConfirmLoading(false);
     }
   };
 
@@ -68,7 +87,7 @@ const RaiseIssue = () => {
         <p className="mb-4 text-gray-300 leading-relaxed">
           Our team is ready to assist you with any questions or issues. Submit your request and we’ll respond promptly!
         </p>
-        <form onSubmit={handleSubmit}>
+        <form>
           <input
             type="text"
             name="epic"
@@ -104,16 +123,56 @@ const RaiseIssue = () => {
             className="w-full p-2 mb-3 bg-gray-800 border border-gray-700 rounded"
             required
           />
+          {/* Animated Gradient Button with fixed design */}
           <Button
-            type="submit"
-            className="w-full bg-blue-900 hover:text-black text-white p-2 rounded"
+            type="button"
+            onClick={handleGeminiReview}
             disabled={loading}
+            className="w-full rounded-full p-2 text-black gradient-animate"
           >
-            {loading ? "Submitting..." : "Send Request"}
+            {loading ? "Processing..." : "Review with Gemini"}
           </Button>
         </form>
         {message && <p className="mt-3 text-sm text-center">{message}</p>}
       </div>
+
+      {/* Gemini Chatbot Response Modal with fixed dimensions and scrollable content */}
+      <Dialog open={showGeminiModal} onOpenChange={(open) => !open && setShowGeminiModal(false)}>
+        <DialogContent className="bg-[#1e1e1e] text-white border-none shadow-2xl rounded-lg p-6">
+          <DialogTitle className="text-2xl font-extrabold">Gemini Chatbot Response</DialogTitle>
+          <div className="mt-4 text-gray-300 prose prose-invert max-h-80 overflow-y-auto">
+            <ReactMarkdown>{geminiResponse}</ReactMarkdown>
+          </div>
+          <DialogFooter className="mt-6 flex gap-4">
+            <Button variant="outline" onClick={handleConfirmSubmit} disabled={confirmLoading}>
+              {confirmLoading ? "Submitting..." : "Confirm Submission"}
+            </Button>
+            <Button variant="destructive" onClick={() => setShowGeminiModal(false)}>
+              Cancel
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Custom CSS for Animated Gradient */}
+      <style jsx>{`
+        @keyframes gradientAnimation {
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
+        }
+        .gradient-animate {
+          background: linear-gradient(90deg, #8c52ff, #5ce1e6);
+          background-size: 200% 200%;
+          animation: gradientAnimation 5s ease infinite;
+        }
+      `}</style>
     </div>
   );
 };
@@ -129,6 +188,7 @@ const Help = () => {
       <div className="p-8 md:p-16 mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12 bg-[#121212] text-white">
         {/* FAQ Section */}
         <div className="col-span-1 lg:col-span-2">
+          <SearchPage />
           <h1 className="text-5xl font-extrabold bg-white bg-clip-text text-transparent mb-8">
             How Can We Assist You?
           </h1>
@@ -137,8 +197,9 @@ const Help = () => {
               <div
                 key={index}
                 className="bg-[#1e1e1e] p-6 rounded-xl shadow-lg hover:shadow-xl transition-transform duration-300"
+                onClick={() => toggleFAQ(index)}
               >
-                <div className="flex items-center justify-between cursor-pointer" onClick={() => toggleFAQ(index)}>
+                <div className="flex items-center justify-between cursor-pointer">
                   <h2 className="text-xl font-semibold">{faq.question}</h2>
                   <ChevronDown className={`w-6 h-6 transition-transform ${openIndex === index ? "rotate-180" : ""}`} />
                 </div>
@@ -146,9 +207,8 @@ const Help = () => {
               </div>
             ))}
           </div>
-          <SearchPage />
         </div>
-        {/* Contact & Support Options */}
+        {/* RaiseIssue Section */}
         <RaiseIssue />
         {/* Support Options */}
         <div className="flex flex-col gap-4">

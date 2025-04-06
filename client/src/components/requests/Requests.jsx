@@ -104,18 +104,19 @@ const classificationTypes = [
 // Assign a background color for each classification type
 const getTypeColor = (type) => {
   switch (type) {
-    case "Slot Allocation": return "bg-indigo-600";
-    case "Grievance": return "bg-red-600";
-    case "ID Correction": return "bg-orange-600";
-    case "Mailing Address Update": return "bg-blue-600";
-    case "Information Request": return "bg-teal-600";
-    case "Technical Issue": return "bg-purple-600";
-    case "Complaint": return "bg-pink-600";
-    case "Volunteer Signup": return "bg-green-600";
-    case "Other": return "bg-gray-600";
-    default: return "bg-gray-500";
+    case "Slot Allocation": return "bg-[#6366F1]";       // Indigo-500
+    case "Grievance": return "bg-[#DC2626]";             // Red-600
+    case "ID Correction": return "bg-[#F97316]";         // Orange-500
+    case "Mailing Address Update": return "bg-[#3B82F6]"; // Blue-500
+    case "Information Request": return "bg-[#14B8A6]";   // Teal-500
+    case "Technical Issue": return "bg-[#8B5CF6]";        // Purple-500
+    case "Complaint": return "bg-[#EC4899]";              // Pink-500
+    case "Volunteer Signup": return "bg-[#22C55E]";       // Green-500
+    case "Other": return "bg-[#6B7280]";                 // Gray-500
+    default: return "bg-[#4B5563]";                      // Fallback Gray
   }
 };
+
 
 export default function Requests() {
   const [requests, setRequests] = useState([]);
