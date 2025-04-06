@@ -83,6 +83,9 @@ const classifyIssue = (text) => {
   if (lower.includes("volunteer")) return "Volunteer Signup";
   return "Other";
 };
+const API = import.meta.env.VITE_API_URL;
+
+const API_BASE_URL = `${API}/api`; 
 
 const classificationTypes = [
   "Slot Allocation",
@@ -123,7 +126,7 @@ export default function Requests() {
   useEffect(() => {
     const fetchIssues = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/issues");
+        const response = await axios.get(`${API_BASE_URL}/issues`);
         setRequests(response.data);
         setFiltered(response.data);
       } catch (error) {
