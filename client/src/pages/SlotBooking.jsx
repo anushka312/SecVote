@@ -7,7 +7,9 @@ import { Link } from "react-router-dom";
 import profileIcon from "../assets/profile.png"; // Import profile icon
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:5000/api"; // replace with your backend URL
+const API = import.meta.env.VITE_API_URL;
+
+const API_BASE_URL = `${API}/api`; // replace with your backend URL
 
 
 export default function SlotBooking() {

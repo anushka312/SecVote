@@ -1,8 +1,21 @@
 // Help.jsx
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { ChevronDown, Mail, MessageCircle, PhoneCall, HelpCircle, Sparkles, X } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import {
+  ChevronDown,
+  Mail,
+  MessageCircle,
+  PhoneCall,
+  HelpCircle,
+  Sparkles,
+  X,
+} from "lucide-react";
 import SearchPage from "../searchPage/Search.jsx";
 import axios from "axios";
 import ReactMarkdown from "react-markdown";
@@ -10,15 +23,18 @@ import ReactMarkdown from "react-markdown";
 const faqs = [
   {
     question: "How do I register to vote?",
-    answer: "Register online through the Voter Portal using your government-issued ID.",
+    answer:
+      "Register online through the Voter Portal using your government-issued ID.",
   },
   {
     question: "Can I vote without a voter ID?",
-    answer: "Some states allow voting without an ID. Check local regulations for clarity.",
+    answer:
+      "Some states allow voting without an ID. Check local regulations for clarity.",
   },
   {
     question: "What if I recently changed my address?",
-    answer: "Update your address through the Voter Portal to ensure correct voting location.",
+    answer:
+      "Update your address through the Voter Portal to ensure correct voting location.",
   },
   {
     question: "When is the next election?",
@@ -26,7 +42,8 @@ const faqs = [
   },
   {
     question: "How do I check my voter status?",
-    answer: "Use our 'Check Status' tool to verify your voter registration details.",
+    answer:
+      "Use our 'Check Status' tool to verify your voter registration details.",
   },
 ];
 
@@ -53,7 +70,10 @@ const RaiseIssue = () => {
     setMessage("");
     try {
       // Send the form data with confirm flag set to false.
-      const response = await axios.post("http://localhost:5000/api/issues", { ...formData, confirm: false });
+      const response = await axios.post("http://localhost:5000/api/issues", {
+        ...formData,
+        confirm: false,
+      });
       setGeminiResponse(response.data.geminiResponse);
       setShowGeminiModal(true);
     } catch (error) {
@@ -67,7 +87,10 @@ const RaiseIssue = () => {
   const handleConfirmSubmit = async () => {
     setConfirmLoading(true);
     try {
-      const response = await axios.post("http://localhost:5000/api/issues", { ...formData, confirm: true });
+      const response = await axios.post("http://localhost:5000/api/issues", {
+        ...formData,
+        confirm: true,
+      });
       setMessage(response.data.message);
       setFormData({ epic: "", name: "", email: "", issue: "" });
       setShowGeminiModal(false);
@@ -82,10 +105,12 @@ const RaiseIssue = () => {
     <div className="space-y-8">
       <div className="bg-[#1e1e1e] p-8 rounded-2xl shadow-xl relative overflow-hidden">
         <h2 className="text-3xl font-extrabold mb-4 flex items-center gap-2 text-white">
-          <Sparkles className="text-[#FFD166] w-10 h-10 mr-2" /> Raise Your Issue
+          <Sparkles className="text-[#FFD166] w-10 h-10 mr-2" /> Raise Your
+          Issue
         </h2>
         <p className="mb-4 text-gray-300 leading-relaxed">
-          Our team is ready to assist you with any questions or issues. Submit your request and we’ll respond promptly!
+          Our team is ready to assist you with any questions or issues. Submit
+          your request and we’ll respond promptly!
         </p>
         <form>
           <input
@@ -137,17 +162,29 @@ const RaiseIssue = () => {
       </div>
 
       {/* Gemini Chatbot Response Modal with fixed dimensions and scrollable content */}
-      <Dialog open={showGeminiModal} onOpenChange={(open) => !open && setShowGeminiModal(false)}>
+      <Dialog
+        open={showGeminiModal}
+        onOpenChange={(open) => !open && setShowGeminiModal(false)}
+      >
         <DialogContent className="bg-[#1e1e1e] text-white border-none shadow-2xl rounded-lg p-6">
-          <DialogTitle className="text-2xl font-extrabold">Gemini Chatbot Response</DialogTitle>
+          <DialogTitle className="text-2xl font-extrabold">
+            Gemini Chatbot Response
+          </DialogTitle>
           <div className="mt-4 text-gray-300 prose prose-invert max-h-80 overflow-y-auto">
             <ReactMarkdown>{geminiResponse}</ReactMarkdown>
           </div>
           <DialogFooter className="mt-6 flex gap-4">
-            <Button variant="outline" onClick={handleConfirmSubmit} disabled={confirmLoading}>
+            <Button
+              variant="outline"
+              onClick={handleConfirmSubmit}
+              disabled={confirmLoading}
+            >
               {confirmLoading ? "Submitting..." : "Confirm Submission"}
             </Button>
-            <Button variant="destructive" onClick={() => setShowGeminiModal(false)}>
+            <Button
+              variant="destructive"
+              onClick={() => setShowGeminiModal(false)}
+            >
               Cancel
             </Button>
           </DialogFooter>
@@ -201,9 +238,15 @@ const Help = () => {
               >
                 <div className="flex items-center justify-between cursor-pointer">
                   <h2 className="text-xl font-semibold">{faq.question}</h2>
-                  <ChevronDown className={`w-6 h-6 transition-transform ${openIndex === index ? "rotate-180" : ""}`} />
+                  <ChevronDown
+                    className={`w-6 h-6 transition-transform ${
+                      openIndex === index ? "rotate-180" : ""
+                    }`}
+                  />
                 </div>
-                {openIndex === index && <p className="mt-4 text-gray-300">{faq.answer}</p>}
+                {openIndex === index && (
+                  <p className="mt-4 text-gray-300">{faq.answer}</p>
+                )}
               </div>
             ))}
           </div>
@@ -213,29 +256,41 @@ const Help = () => {
         {/* Support Options */}
         <div className="flex flex-col gap-4">
           <button className="flex items-center gap-4 px-6 py-3 rounded-xl bg-[#1e1e1e] transition duration-300 shadow-md">
-            <Mail className="w-5 h-5 text-yellow-400" /> Email Support
+            <Mail className="w-5 h-5 text-[#facc15]" /> Email Support
           </button>
           <button className="flex items-center gap-4 px-6 py-3 rounded-xl bg-[#1e1e1e] transition duration-300 shadow-md">
-            <MessageCircle className="w-5 h-5 text-green-400" /> Live Chat
+            <MessageCircle className="w-5 h-5 text-[#22c55e]" /> Live Chat
           </button>
           <button className="flex items-center gap-4 px-6 py-3 rounded-xl bg-[#1e1e1e] transition duration-300 shadow-md">
-            <PhoneCall className="w-5 h-5 text-blue-400" /> Call Us
+            <PhoneCall className="w-5 h-5 text-[#3b82f6]" /> Call Us
           </button>
         </div>
         {/* Quick Links */}
         <div className="mt-8">
           <h3 className="text-xl font-semibold mb-4">Quick Links</h3>
           <div className="grid grid-cols-2 gap-4">
-            <a href="#" className="flex items-center gap-2 text-pink-400 hover:underline">
+            <a
+              href="#"
+              className="flex items-center gap-2 text-[#ec4899] hover:underline"
+            >
               <HelpCircle /> Voter Guide
             </a>
-            <a href="#" className="flex items-center gap-2 text-yellow-400 hover:underline">
+            <a
+              href="#"
+              className="flex items-center gap-2 text-[#facc15] hover:underline"
+            >
               <HelpCircle /> Polling Station
             </a>
-            <a href="#" className="flex items-center gap-2 text-green-400 hover:underline">
+            <a
+              href="#"
+              className="flex items-center gap-2 text-[#22c55e] hover:underline"
+            >
               <HelpCircle /> ID Requirements
             </a>
-            <a href="#" className="flex items-center gap-2 text-blue-400 hover:underline">
+            <a
+              href="#"
+              className="flex items-center gap-2 text-[#3b82f6] hover:underline"
+            >
               <HelpCircle /> Update Info
             </a>
           </div>
