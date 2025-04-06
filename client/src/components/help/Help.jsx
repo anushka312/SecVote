@@ -60,6 +60,9 @@ const RaiseIssue = () => {
   const [showGeminiModal, setShowGeminiModal] = useState(false);
   const [geminiResponse, setGeminiResponse] = useState("");
 
+  const API = import.meta.env.VITE_API_URL;
+  const API_BASE_URL = `${API}/api`;
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -70,7 +73,7 @@ const RaiseIssue = () => {
     setMessage("");
     try {
       // Send the form data with confirm flag set to false.
-      const response = await axios.post("http://localhost:5000/api/issues", {
+      const response = await axios.post(`${API_BASE_URL}/issues`, {
         ...formData,
         confirm: false,
       });
@@ -87,7 +90,7 @@ const RaiseIssue = () => {
   const handleConfirmSubmit = async () => {
     setConfirmLoading(true);
     try {
-      const response = await axios.post("http://localhost:5000/api/issues", {
+      const response = await axios.post(`${API_BASE_URL}/issues`, {
         ...formData,
         confirm: true,
       });
