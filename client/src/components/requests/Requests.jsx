@@ -1,4 +1,3 @@
-// Request.jsx
 import { useEffect, useState } from "react";
 import {
   Dialog,
@@ -21,10 +20,8 @@ import {
 } from "lucide-react";
 import axios from "axios";
 
-// MultiSelect component for filtering by classification type
 function MultiSelect({ options, selectedValues, onChange, placeholder, icon }) {
   const [open, setOpen] = useState(false);
-
   return (
     <div className="relative w-full md:w-1/3">
       <button
@@ -74,7 +71,6 @@ function MultiSelect({ options, selectedValues, onChange, placeholder, icon }) {
   );
 }
 
-// Compute classification from the detailed issue text
 const classifyIssue = (text) => {
   const lower = text.toLowerCase();
   if (lower.includes("slot")) return "Slot Allocation";
@@ -88,7 +84,6 @@ const classifyIssue = (text) => {
   return "Other";
 };
 
-// Define the classification types for filtering
 const classificationTypes = [
   "Slot Allocation",
   "Grievance",
@@ -101,37 +96,34 @@ const classificationTypes = [
   "Other",
 ];
 
-// Assign a background color for each classification type
 const getTypeColor = (type) => {
   switch (type) {
-    case "Slot Allocation": return "bg-indigo-600";
-    case "Grievance": return "bg-red-600";
-    case "ID Correction": return "bg-orange-600";
-    case "Mailing Address Update": return "bg-blue-600";
-    case "Information Request": return "bg-teal-600";
-    case "Technical Issue": return "bg-purple-600";
-    case "Complaint": return "bg-pink-600";
-    case "Volunteer Signup": return "bg-green-600";
-    case "Other": return "bg-gray-600";
-    default: return "bg-gray-500";
+    case "Slot Allocation": return "bg-[#6366F1]";       // Indigo-500
+    case "Grievance": return "bg-[#DC2626]";             // Red-600
+    case "ID Correction": return "bg-[#F97316]";         // Orange-500
+    case "Mailing Address Update": return "bg-[#3B82F6]"; // Blue-500
+    case "Information Request": return "bg-[#14B8A6]";   // Teal-500
+    case "Technical Issue": return "bg-[#8B5CF6]";        // Purple-500
+    case "Complaint": return "bg-[#EC4899]";              // Pink-500
+    case "Volunteer Signup": return "bg-[#22C55E]";       // Green-500
+    case "Other": return "bg-[#6B7280]";                 // Gray-500
+    default: return "bg-[#4B5563]";                      // Fallback Gray
   }
 };
+
 
 export default function Requests() {
   const [requests, setRequests] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedTypes, setSelectedTypes] = useState([]);
-  const [sortOrder, setSortOrder] = useState("desc"); // 'desc' = newest-to-oldest, 'asc' = oldest-to-newest
+  const [sortOrder, setSortOrder] = useState("desc");
   const [selectedRequest, setSelectedRequest] = useState(null);
 
   useEffect(() => {
-    const API = import.meta.env.VITE_API_URL;
     const fetchIssues = async () => {
-      
       try {
-        const response = await axios.get(`${API}/api/issues`);
-        // response.data has the original fields from the schema: epic, name, email, issue, createdAt.
+        const response = await axios.get("http://localhost:5000/api/issues");
         setRequests(response.data);
         setFiltered(response.data);
       } catch (error) {
@@ -143,7 +135,6 @@ export default function Requests() {
     fetchIssues();
   }, []);
 
-  // Apply filtering and sorting
   const handleFilter = () => {
     let filteredData = [...requests];
     if (selectedTypes.length) {
@@ -167,7 +158,6 @@ export default function Requests() {
     <div className="p-8 md:p-16 mx-auto bg-[#121212] text-white min-h-screen">
       <h1 className="text-5xl font-extrabold text-gray-100 mb-8">Requests</h1>
       
-      {/* Filter Controls */}
       <div className="flex flex-col md:flex-row gap-4 mb-6 items-center">
         <MultiSelect
           options={classificationTypes}
@@ -188,28 +178,26 @@ export default function Requests() {
         </div>
       </div>
       
-      {/* Requests Table */}
       <div className="bg-[#1e1e1e] rounded-xl shadow-lg">
-        {/* Table Header with Icons */}
         <div className="grid grid-cols-5 gap-4 font-semibold border-b border-gray-700 p-4 sticky top-0 bg-[#1e1e1e] z-10">
           <div className="flex items-center gap-1">
-            <Hash className="w-4 h-4 text-white" />
+            <Hash className="w-4 h-4" style={{ color: "#ffffff" }} />
             <span>EPIC</span>
           </div>
           <div className="flex items-center gap-1">
-            <User className="w-4 h-4 text-green-500" />
+            <User className="w-4 h-4" style={{ color: "#22c55e" }} />
             <span>Name</span>
           </div>
           <div className="flex items-center gap-1">
-            <Mail className="w-4 h-4 text-yellow-500" />
+            <Mail className="w-4 h-4" style={{ color: "#f59e0b" }} />
             <span>Email</span>
           </div>
           <div className="flex items-center gap-1">
-            <AlertTriangle className="w-4 h-4 text-red-500" />
+            <AlertTriangle className="w-4 h-4" style={{ color: "#ef4444" }} />
             <span>Issue</span>
           </div>
           <div className="flex items-center gap-1">
-            <Calendar className="w-4 h-4 text-blue-500" />
+            <Calendar className="w-4 h-4" style={{ color: "#3b82f6" }} />
             <span>Date</span>
           </div>
         </div>
@@ -218,7 +206,6 @@ export default function Requests() {
             <div className="text-center p-4">Loading issues...</div>
           ) : filtered.length ? (
             filtered.map((req) => {
-              // Compute classification from the detailed issue text for table display
               const classification = classifyIssue(req.issue);
               return (
                 <div
@@ -245,7 +232,6 @@ export default function Requests() {
         </div>
       </div>
       
-      {/* Popup Dialog for Request Details */}
       <Dialog open={!!selectedRequest} onOpenChange={(open) => !open && setSelectedRequest(null)}>
         <DialogContent className="bg-[#1e1e1e] text-white border-none shadow-2xl rounded-lg p-6">
           {selectedRequest && (
@@ -257,21 +243,11 @@ export default function Requests() {
                 </DialogDescription>
               </div>
               <div className="space-y-2">
-                <p>
-                  <span className="font-semibold">EPIC:</span> {selectedRequest.epic}
-                </p>
-                <p>
-                  <span className="font-semibold">Name:</span> {selectedRequest.name}
-                </p>
-                <p>
-                  <span className="font-semibold">Email:</span> {selectedRequest.email}
-                </p>
-                <p>
-                  <span className="font-semibold">Issue:</span> {selectedRequest.issue}
-                </p>
-                <p>
-                  <span className="font-semibold">Submitted On:</span> {new Date(selectedRequest.createdAt).toLocaleString()}
-                </p>
+                <p><span className="font-semibold">EPIC:</span> {selectedRequest.epic}</p>
+                <p><span className="font-semibold">Name:</span> {selectedRequest.name}</p>
+                <p><span className="font-semibold">Email:</span> {selectedRequest.email}</p>
+                <p><span className="font-semibold">Issue:</span> {selectedRequest.issue}</p>
+                <p><span className="font-semibold">Submitted On:</span> {new Date(selectedRequest.createdAt).toLocaleString()}</p>
               </div>
               <DialogFooter className="mt-6">
                 <Button variant="outline" onClick={() => setSelectedRequest(null)} className="flex gap-2">
