@@ -7,6 +7,10 @@ SecVote is a two-stage, automated voter verification system designed to streamli
 
 [https://secvote.onrender.com/](https://secvote.onrender.com/)
 
+## Video Link
+
+https://drive.google.com/file/d/1fFU8jEgZY_gyxTee5L47JdUddeYra7LZ/view?usp=drive_link
+
 ## Features
 
 ### Voter-Facing Features (Web Portal)
