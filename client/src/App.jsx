@@ -22,6 +22,7 @@ import Requests from './components/requests/Requests'
 import UserStatus from './pages/UserStatus.jsx'
 import UserStatusAdmin from './pages/protected/UserStatusAdmin.jsx'
 import UserSearch from './pages/UserSearch.jsx'
+import About from './components/about/About.jsx'
 
 function App() {
 
@@ -53,6 +54,7 @@ function App() {
           <Route path='slot' element={<SlotBooking />} />
           <Route path='request' element={<Requests />} />
           <Route path='help' element={<Help />} />
+          <Route path='about' element={<About />} />
         </Route>
         <Route path='/test' element={<ComponentTest />} />
       </Routes>
