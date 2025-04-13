@@ -33,6 +33,7 @@ const NavBar = () => {
                     <li className="relative table-cell py-2"><Link className="inline-block relative no-underline after-line" to="/station/12345">Poling Station</Link></li>
                     <li className="relative table-cell py-2"><Link className="inline-block relative no-underline after-line" to="/slot">Slots</Link></li>
                     <li className="relative table-cell py-2"><Link className="inline-block relative no-underline after-line" to="/help">Help</Link></li>
+                    <li className="relative table-cell py-2"><Link className="inline-block relative no-underline after-line" to="/about">About</Link></li>
                     {
                         isAdmin && <li className="relative table-cell py-2"><Link className="inline-block relative no-underline after-line" to="/request">Request</Link></li>
                     }
